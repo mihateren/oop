@@ -2,12 +2,22 @@
 #include "include/countOnesInRange.h"
 
 int main() {
-    int lhv, rhv;
-    std::cout << "enter the left hand value: ";
-    std::cin  >> lhv;
-    std::cout << "enter the right hand value: ";
-    std::cin  >> rhv;
+    int start, end;
+    std::cout << "enter the beginning of the sequence: ";
+    std::cin  >> start;
+    std::cout << "enter the ending of the sequence: ";
+    std::cin  >> end;
 
-    std::cout << "result: " << countOnesInRange(lhv, rhv) << std::endl;
+    int totalOnes = 0;
+    
+    try {
+        totalOnes = countOnesInRange(start, end);
+        std::cout << "result: " << totalOnes << std::endl;
+    } catch (const NegativeValueException& e) {
+        std::cerr << e.what() << std::endl;
+    } catch (const InvalidRangeException& e) {
+        std::cerr << e.what() << std::endl;
+    }
+
     return 0;
 }

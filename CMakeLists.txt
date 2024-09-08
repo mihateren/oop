@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
-project(gtest)
+project(lr1)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -29,7 +29,7 @@ target_link_libraries(${CMAKE_PROJECT_NAME}_exe PRIVATE ${CMAKE_PROJECT_NAME}_li
 # Добавление тестов
 enable_testing()
 
-add_executable(tests test/tests01.cpp)
+add_executable(tests test/lrTests.cpp)
 target_link_libraries(tests ${CMAKE_PROJECT_NAME}_lib gtest_main)
 
 # Добавление тестов в тестовый набор
