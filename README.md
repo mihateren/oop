@@ -13,7 +13,6 @@
 1. **Склонируйте ветку с лабой и откройте в VS Code**
     ```bash
    git clone -b lr1 https://github.com/mihateren/oop.git
-   cd oop
    code oop
     ```
 2. **Сборка через Dev Container**
@@ -26,6 +25,7 @@
 4. **Сборка и запуск проекта в контейнере**
     После того как контейнер будет готов, откройте терминал в VS Code и выполните команды:
     ```bash
+    mkdir build
     cd build
     make
     ```
