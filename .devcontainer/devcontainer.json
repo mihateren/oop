@@ -1,5 +1,5 @@
 {
-    "name": "LR1 oop c++",
+    "name": "LR2 oop c++",
     "dockerFile": "Dockerfile",
     "context": "..",
     "appPort": [],

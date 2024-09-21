@@ -1,9 +1,9 @@
 cmake_minimum_required(VERSION 3.10)
-project(lr1)
+project(lr2)
 
+# Установка стандарта C++
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
 
 # Добавление опций компиляции
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror=maybe-uninitialized")
@@ -20,17 +20,28 @@ FetchContent_Declare(
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
+# Установка директорий
+set(INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include)
+set(SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
-add_library(${CMAKE_PROJECT_NAME}_lib src/countOnesInRange.cpp)
-add_executable(${CMAKE_PROJECT_NAME}_exe main.cpp)
+include_directories(${INCLUDE_DIR})
 
-target_link_libraries(${CMAKE_PROJECT_NAME}_exe PRIVATE ${CMAKE_PROJECT_NAME}_lib)
+# Указание исходных файлов для библиотеки
+file(GLOB_RECURSE SOURCES LIST_DIRECTORIES false ${SOURCE_DIR}/*.cpp)
 
-# Добавление тестов
+# Создание библиотеки
+add_library(lr_02_lib ${SOURCES})
+
+# Создание исполняемого файла для основной программы
+add_executable(lr_02_exe main.cpp)
+target_link_libraries(lr_02_exe PRIVATE lr_02_lib)
+
+# Настройка тестов
 enable_testing()
 
+# Создание исполняемого файла для тестов
 add_executable(tests test/lrTests.cpp)
-target_link_libraries(tests ${CMAKE_PROJECT_NAME}_lib gtest_main)
+target_link_libraries(tests PRIVATE lr_02_lib gtest_main)
 
-# Добавление тестов в тестовый набор
+# Регистрация тестов для запуска
 add_test(NAME MyProjectTests COMMAND tests)
