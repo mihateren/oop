@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
-project(lr2)
+project(lr3)
 
 # Установка стандарта C++
 set(CMAKE_CXX_STANDARD 20)
@@ -30,18 +30,18 @@ include_directories(${INCLUDE_DIR})
 file(GLOB_RECURSE SOURCES LIST_DIRECTORIES false ${SOURCE_DIR}/*.cpp)
 
 # Создание библиотеки
-add_library(lr_02_lib ${SOURCES})
+add_library(lr_03_lib ${SOURCES})
 
 # Создание исполняемого файла для основной программы
-add_executable(lr_02_exe main.cpp)
-target_link_libraries(lr_02_exe PRIVATE lr_02_lib)
+add_executable(lr_03_exe main.cpp)
+target_link_libraries(lr_03_exe PRIVATE lr_03_lib)
 
-# Настройка тестов
+# # Настройка тестов
 enable_testing()
 
-# Создание исполняемого файла для тестов
+# # Создание исполняемого файла для тестов
 add_executable(tests test/lrTests.cpp)
-target_link_libraries(tests PRIVATE lr_02_lib gtest_main)
+target_link_libraries(tests PRIVATE lr_03_lib gtest_main)
 
-# Регистрация тестов для запуска
+# # Регистрация тестов для запуска
 add_test(NAME MyProjectTests COMMAND tests)
