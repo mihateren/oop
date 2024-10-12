@@ -24,5 +24,5 @@ class Rhomb : public Figure {
 
     private:
         static const size_t angles_ = 4;
-        Point po[angles_];
+        Point points[angles_];
 };

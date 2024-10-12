@@ -24,6 +24,6 @@ class Hexagon : public Figure{
 
     private:
         static const size_t angles_ = 6;
-        Point po[angles_];
+        Point points[angles_];
 
 };

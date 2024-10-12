@@ -24,5 +24,5 @@ public:
 
 private:
     static const size_t angles_ = 5;
-    Point po[angles_];
+    Point points[angles_];
 };
