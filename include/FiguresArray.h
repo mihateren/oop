@@ -1,5 +1,5 @@
 #pragma once
-#include<iostream>
+#include <iostream>
 #include "Figure.h"
 
 class FiguresArray

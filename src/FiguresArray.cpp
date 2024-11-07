@@ -1,7 +1,5 @@
 #include "../include/FiguresArray.h"
 
-using namespace std;
-
 FiguresArray::FiguresArray() : buf(nullptr), size_(0), cap(3){
     buf = new Figure*[cap];
     for (int i = 0; i < cap; i++) {
@@ -41,7 +39,7 @@ Figure* & FiguresArray::operator[](int idx){
 
 void FiguresArray::remove(int idx){
     if (idx < 0 || idx > size_) {
-        throw invalid_argument("Index out of range");
+        throw std::invalid_argument("Index out of range");
     }
 
     Figure** new_buf = new Figure*[cap];

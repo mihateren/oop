@@ -1,7 +1,5 @@
 #include "../include/Hexagon.h"
 
-using namespace std;
-
 Hexagon::Hexagon() : points{Point(), Point(), Point(), Point()} {}
 
 Hexagon::Hexagon(Point& p1, Point& p2, Point& p3, Point& p4, Point& p5, Point& p6) : 
@@ -46,7 +44,7 @@ Hexagon& Hexagon::operator = (Hexagon &&other){
     }
 
     for(size_t i = 0; i < angles_; ++i){
-        points[i] = move(other.points[i]);
+        points[i] = std::move(other.points[i]);
     }
 
     return *this;
@@ -61,15 +59,15 @@ bool Hexagon::operator == (const Hexagon& other){
     return true;
 }
 
-ostream& operator << (ostream& os, const Hexagon& Hexagon){
+std::ostream& operator << (std::ostream& os, const Hexagon& Hexagon){
     for(size_t i = 0; i < Hexagon::angles_; ++i){
-        os << Hexagon.points[i] << endl;
+        os << Hexagon.points[i] << std::endl;
     }
     return os;
 }
 
-istream& operator >> (istream& is, Hexagon& Hexagon) {
-    cout << "Enter hexagon nodes in format (x1 y1 x2 y2 x3 y3 x4 y4 x5 y5 x6 y6): " << endl;
+std::istream& operator >> (std::istream& is, Hexagon& Hexagon) {
+    std::cout << "Enter hexagon nodes in format (x1 y1 x2 y2 x3 y3 x4 y4 x5 y5 x6 y6): " << std::endl;
     for (size_t i = 0; i < Hexagon::angles_; ++i) {
          is >> Hexagon.points[i];
     }

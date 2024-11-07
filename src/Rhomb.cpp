@@ -1,7 +1,5 @@
 #include "../include/Rhomb.h"
 
-using namespace std;
-
 Rhomb::Rhomb() : points{Point(), Point(), Point(), Point()} {}
 
 Rhomb::Rhomb(Point& p1, Point& p2, Point& p3, Point& p4) : points{p1, p2, p3, p4}  {}
@@ -43,7 +41,7 @@ Rhomb& Rhomb::operator = (Rhomb &&other){
     }
 
     for(size_t i = 0; i < angles_; ++i){
-        points[i] = move(other.points[i]);
+        points[i] = std::move(other.points[i]);
     }
 
     return *this;
@@ -59,22 +57,20 @@ bool Rhomb::operator == (const Rhomb& other){
     return true;
 }
 
-ostream& operator << (ostream& os, const Rhomb& Rhomb){
+std::ostream& operator << (std::ostream& os, const Rhomb& Rhomb){
     for(size_t i = 0; i < Rhomb::angles_; ++i){
-        os << Rhomb.points[i] << endl;
+        os << Rhomb.points[i] << std::endl;
     }
     return os;
 }
 
-istream& operator >> (istream& is, Rhomb& Rhomb) {
-    cout << "Enter rhomb nodes in format (x1 y1 x2 y2 x3 y3 x4 y4): " << endl;
+std::istream& operator >> (std::istream& is, Rhomb& Rhomb) {
+    std::cout << "Enter rhomb nodes in format (x1 y1 x2 y2 x3 y3 x4 y4): " << std::endl;
     for (size_t i = 0; i < Rhomb::angles_; ++i) {
         is >> Rhomb.points[i];
     }
     return is;
 }
-
-
 
 Rhomb::operator double() const{
     return square();

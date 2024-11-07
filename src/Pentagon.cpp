@@ -1,7 +1,5 @@
 #include "../include/Pentagon.h"
 
-using namespace std;
-
 Pentagon::Pentagon() : points{Point(), Point(), Point(), Point(), Point()} {}
 
 Pentagon::Pentagon(Point& p1, Point& p2, Point& p3, Point& p4, Point& p5) :
@@ -46,7 +44,7 @@ Pentagon& Pentagon::operator = (Pentagon &&other){
 
 
     for(size_t i = 0; i < angles_; ++i){
-        points[i] = move(other.points[i]);        
+        points[i] = std::move(other.points[i]);        
     }
 
     return *this;
@@ -62,16 +60,16 @@ bool Pentagon::operator == (const Pentagon &other){
 }
 
 
-ostream& operator << (ostream& os, const Pentagon &pentagon){
+std::ostream& operator << (std::ostream& os, const Pentagon &pentagon){
     for(size_t i = 0; i < Pentagon::angles_; ++i){
-        os << pentagon.points[i] << endl;
+        os << pentagon.points[i] << std::endl;
     }
     return os;
 
 }
 
-istream& operator >> (istream& is, Pentagon &pentagon){
-    cout << "Enter pentagon nodes in format (x1 y1 x2 y2 x3 y3 x4 y4 x5 y5): " << endl;
+std::istream& operator >> (std::istream& is, Pentagon &pentagon){
+    std::cout << "Enter pentagon nodes in format (x1 y1 x2 y2 x3 y3 x4 y4 x5 y5): " << std::endl;
     for(size_t i = 0; i < Pentagon::angles_; ++i){
          is >> pentagon.points[i];
     }
