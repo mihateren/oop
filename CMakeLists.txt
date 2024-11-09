@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
-project(lr3)
+project(lr5)
 
 # Установка стандарта C++
 set(CMAKE_CXX_STANDARD 20)
@@ -22,26 +22,28 @@ FetchContent_MakeAvailable(googletest)
 
 # Установка директорий
 set(INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include)
-set(SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
+set(SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)  # Папка с исходными файлами
 
+# Указываем, что все заголовочные файлы находятся в директории include
 include_directories(${INCLUDE_DIR})
 
-# Указание исходных файлов для библиотеки
-file(GLOB_RECURSE SOURCES LIST_DIRECTORIES false ${SOURCE_DIR}/*.cpp)
-
-# Создание библиотеки
-add_library(lr_03_lib ${SOURCES})
+# Добавляем исходные файлы из папки src
+file(GLOB_RECURSE SRC_SOURCES LIST_DIRECTORIES false ${SRC_DIR}/*.cpp ${SRC_DIR}/*.tpp)
 
 # Создание исполняемого файла для основной программы
-add_executable(lr_03_exe main.cpp)
-target_link_libraries(lr_03_exe PRIVATE lr_03_lib)
+add_executable(lr_05_exe main.cpp ${SRC_SOURCES})
 
-# # Настройка тестов
+# Настройка тестов
 enable_testing()
 
-# # Создание исполняемого файла для тестов
-add_executable(tests test/lrTests.cpp)
-target_link_libraries(tests PRIVATE lr_03_lib gtest_main)
+# Автоматическое добавление всех файлов из директории test
+file(GLOB_RECURSE TEST_SOURCES LIST_DIRECTORIES false ${CMAKE_CURRENT_SOURCE_DIR}/test/*.cpp)
 
-# # Регистрация тестов для запуска
+# Создание исполняемого файла для тестов
+add_executable(tests ${TEST_SOURCES} ${SRC_SOURCES})  # Линкование тестов с исходниками
+
+# Линковка с библиотеками
+target_link_libraries(tests PRIVATE gtest gtest_main)
+
+# Регистрация тестов для запуска
 add_test(NAME MyProjectTests COMMAND tests)
