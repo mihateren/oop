@@ -156,6 +156,63 @@ typename DynamicArray<T>::Iterator DynamicArray<T>::insert(Iterator i, const T &
 }
 
 template <typename T>
+typename DynamicArray<T>::Iterator DynamicArray<T>::insert(Iterator i, const T &value, size_t count)
+{
+    size_t index = i - begin();
+
+    if (size_ + count > capacity_)
+    {
+        reserve(std::max(capacity_ * 2, size_ + count));
+    }
+
+    for (size_t j = size_; j > index; --j)
+    {
+        std::allocator_traits<std::pmr::polymorphic_allocator<T>>::construct(
+            allocator_, data_ + j + count - 1, std::move(data_[j - 1]));
+        std::allocator_traits<std::pmr::polymorphic_allocator<T>>::destroy(
+            allocator_, data_ + j - 1);
+    }
+
+    for (size_t j = 0; j < count; ++j)
+    {
+        std::allocator_traits<std::pmr::polymorphic_allocator<T>>::construct(
+            allocator_, data_ + index + j, value);
+    }
+
+    size_ += count;
+    return begin() + index;
+}
+
+template <typename T>
+typename DynamicArray<T>::Iterator DynamicArray<T>::insert(Iterator i, Iterator start, Iterator end)
+{
+    size_t index = i - begin();
+    size_t count = end - start;
+
+    if (size_ + count > capacity_)
+    {
+        reserve(std::max(capacity_ * 2, size_ + count));
+    }
+
+    for (size_t j = size_; j > index; --j)
+    {
+        std::allocator_traits<std::pmr::polymorphic_allocator<T>>::construct(
+            allocator_, data_ + j + count - 1, std::move(data_[j - 1]));
+        std::allocator_traits<std::pmr::polymorphic_allocator<T>>::destroy(
+            allocator_, data_ + j - 1);
+    }
+
+    for (size_t j = 0; j < count; ++j)
+    {
+        std::allocator_traits<std::pmr::polymorphic_allocator<T>>::construct(
+            allocator_, data_ + index + j, *(start + j));
+    }
+
+    size_ += count;
+    return begin() + index;
+}
+
+template <typename T>
 void DynamicArray<T>::push_back(const T &value)
 {
     if (size_ == capacity_)

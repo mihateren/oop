@@ -35,7 +35,8 @@ public:
     Iterator erase(Iterator start, Iterator end);
 
     Iterator insert(Iterator i, const T &value);
-
+    Iterator insert(Iterator i, const T &value, size_t count);
+    Iterator insert(Iterator i, Iterator start, Iterator end);
     void push_back(const T &value);
     void pop_back();
 

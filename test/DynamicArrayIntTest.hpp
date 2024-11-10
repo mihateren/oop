@@ -200,6 +200,41 @@ TEST(testDynamicArrayInt, insertOperatorValue)
     ASSERT_TRUE(array[3] == 3);
 }
 
+TEST(testDynamicArrayInt, insertOperatorValueWithCount) {
+    DynamicArray<int> array;
+    array.push_back(1);
+    array.push_back(2);
+    array.push_back(3);
+
+    array.insert(array.begin() + 1, 4, 2);
+
+    ASSERT_TRUE(array[0] == 1);
+    ASSERT_TRUE(array[1] == 4);
+    ASSERT_TRUE(array[2] == 4);
+    ASSERT_TRUE(array[3] == 2);
+    ASSERT_TRUE(array[4] == 3);
+}
+
+TEST(testDynamicArrayInt, insertOperatorIterator) {
+    DynamicArray<int> array;
+    array.push_back(1);
+    array.push_back(2);
+    array.push_back(3);
+    DynamicArray<int> array2;
+    array2.push_back(4);
+    array2.push_back(5);
+    array2.push_back(6);
+
+    array.insert(array.begin() + 1, array2.begin(), array2.end());
+
+    ASSERT_TRUE(array[0] == 1);
+    ASSERT_TRUE(array[1] == 4);
+    ASSERT_TRUE(array[2] == 5);
+    ASSERT_TRUE(array[3] == 6);
+    ASSERT_TRUE(array[4] == 2);
+    ASSERT_TRUE(array[5] == 3);
+}
+
 
 TEST(testDynamicArrayInt, pushBackOperator)
 {

@@ -213,6 +213,39 @@ TEST(testDynamicArrayStruct, insertOperatorValue)
     ASSERT_TRUE(array[3] == MyStruct(3, 3.3, "third"));
 }
 
+TEST(testDynamicArrayStruct, insertOperatorValueWithCount) {
+    DynamicArray<MyStruct> array;
+    array.push_back(MyStruct(1, 1.1, "first"));
+    array.push_back(MyStruct(2, 2.2, "second"));
+    array.push_back(MyStruct(3, 3.3, "third"));
+
+    array.insert(array.begin() + 1, MyStruct(4, 4.4, "fourth"), 2);
+
+    ASSERT_TRUE(array[0] == MyStruct(1, 1.1, "first"));
+    ASSERT_TRUE(array[1] == MyStruct(4, 4.4, "fourth"));
+    ASSERT_TRUE(array[2] == MyStruct(4, 4.4, "fourth"));
+    ASSERT_TRUE(array[3] == MyStruct(2, 2.2, "second"));
+    ASSERT_TRUE(array[4] == MyStruct(3, 3.3, "third"));
+}
+
+TEST(testDynamicArrayStruct, insertOperatorIterator) {
+    DynamicArray<MyStruct> array;
+    array.push_back(MyStruct(1, 1.1, "first"));
+    array.push_back(MyStruct(2, 2.2, "second"));
+    array.push_back(MyStruct(3, 3.3, "third"));
+    DynamicArray<MyStruct> array2;
+    array2.push_back(MyStruct(4, 4.4, "fourth"));
+    array2.push_back(MyStruct(5, 5.5, "fifth"));
+
+    array.insert(array.begin() + 1, array2.begin(), array2.end());
+
+    ASSERT_TRUE(array[0] == MyStruct(1, 1.1, "first"));
+    ASSERT_TRUE(array[1] == MyStruct(4, 4.4, "fourth"));
+    ASSERT_TRUE(array[2] == MyStruct(5, 5.5, "fifth"));
+    ASSERT_TRUE(array[3] == MyStruct(2, 2.2, "second"));
+    ASSERT_TRUE(array[4] == MyStruct(3, 3.3, "third"));
+}
+
 
 TEST(testDynamicArrayStruct, pushBackOperator)
 {
