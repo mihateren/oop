@@ -1,31 +1,19 @@
 #pragma once
 
+class Orc;
+class Squirrel;
+class Druid;
+class NPC;
+
 #include "Visitor.hpp"
-#include "NPC.hpp"
 
 class BattleVisitor : public Visitor
 {
 public:
-    BattleVisitor() {}
+    void visit(const NPC &attacker, Orc &orc) override;
+    void visit(const NPC &attacker, Squirrel &squirrel) override;
+    void visit(const NPC &attacker, Druid &druid) override;
 
-    ~BattleVisitor() {}
-
-    void visit(const Orc &orc) override;
-
-    void visit(const Squirrel &squirrel) override;
-
-    void visit(const Druid &druid) override;
-
-    void attack(const NPC &attacker, NPC &defender) const
-    {
-        int attackerPower = attacker.getAttackPower();
-        int defenderHP = defender.getHP();
-
-        int damage = attackerPower;
-
-        defender.setHP(defenderHP - damage);
-
-        std::cout << "Атакующий нанес " << damage << " урона!" << std::endl;
-        std::cout << "Здоровье защищающегося: " << defender.getHP() << std::endl;
-    }
+private:
+    void attack(const NPC &attacker, NPC &defender) const;
 };

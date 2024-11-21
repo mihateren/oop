@@ -32,9 +32,6 @@ include_directories(${INCLUDE_DIR}/Mobs)
 # Добавляем исходные файлы из папки src
 file(GLOB_RECURSE SRC_SOURCES LIST_DIRECTORIES false ${SRC_DIR}/*.cpp ${SRC_DIR}/*.tpp)
 
-# Добавляем BattleVisitor.cpp в список исходных файлов
-list(APPEND SRC_SOURCES ${SRC_DIR}/BattleVisitor.cpp)
-
 # Создание исполняемого файла для основной программы
 add_executable(lr_06 main.cpp ${SRC_SOURCES})
 

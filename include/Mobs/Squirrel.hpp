@@ -13,19 +13,14 @@ private:
 public:
     Squirrel(int health = 10, int attackDistance = 1, int attackPower = 0) : health(health), attackDistance(attackDistance), attackPower(attackPower) {};
 
-    void accept(BattleVisitor &visitor) const override
+    void accept(BattleVisitor &battleVisitor, const NPC &attacker) override
     {
-        visitor.visit(*this);
-    }
-
-    void battle(NPC &other) const override
-    {
-        BattleVisitor visitor;
-        other.accept(visitor);
+        battleVisitor.visit(attacker, *this);
     }
 
     int getHP() const override { return health; }
     void setHP(int hp) override { health = hp; }
     int getAttackPower() const override { return attackPower; }
     int getAttackDistance() const { return attackDistance; }
+    const char *getType() const override { return "Белка"; }
 };

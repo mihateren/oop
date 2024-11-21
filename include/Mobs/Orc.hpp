@@ -11,21 +11,16 @@ private:
     int attackPower;
 
 public:
-    Orc(int health = 100, int attackDistance = 5, int attackPower = 40) : health(health), attackDistance(attackDistance), attackPower(attackPower) {};
+    Orc(int health = 100, int attackDistance = 5, int attackPower = 40)
+        : health(health), attackDistance(attackDistance), attackPower(attackPower) {}
 
-    void accept(BattleVisitor &visitor) const override
+    void accept(BattleVisitor &battleVisitor, const NPC &attacker) override
     {
-        visitor.visit(*this);
-    }
-
-    void battle(NPC &other) const override
-    {
-        BattleVisitor visitor;
-        other.accept(visitor);
+        battleVisitor.visit(attacker, *this);
     }
 
     int getHP() const override { return health; }
     void setHP(int hp) override { health = hp; }
-    int getAttackPower() const  override { return attackPower; }
-    int getAttackDistance() const { return attackDistance; }
+    int getAttackPower() const override { return attackPower; }
+    const char *getType() const override { return "Орк"; }
 };

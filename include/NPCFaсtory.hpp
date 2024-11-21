@@ -14,7 +14,7 @@ enum class NPCType
     Druid
 };
 
-class NPCFabric
+class NPCFactory
 {
 public:
     std::unique_ptr<NPC> createNPC(NPCType type) const
