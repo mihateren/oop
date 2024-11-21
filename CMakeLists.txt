@@ -23,21 +23,26 @@ FetchContent_MakeAvailable(googletest)
 # Установка директорий
 set(INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include)
 set(SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)  # Папка с исходными файлами
+set(TEST_DIR ${CMAKE_CURRENT_SOURCE_DIR}/test)  # Папка с тестами
 
-# Указываем, что все заголовочные файлы находятся в директории include
+# Указываем, что все заголовочные файлы находятся в директории include и её поддиректориях
 include_directories(${INCLUDE_DIR})
+include_directories(${INCLUDE_DIR}/Mobs)
 
 # Добавляем исходные файлы из папки src
 file(GLOB_RECURSE SRC_SOURCES LIST_DIRECTORIES false ${SRC_DIR}/*.cpp ${SRC_DIR}/*.tpp)
 
+# Добавляем BattleVisitor.cpp в список исходных файлов
+list(APPEND SRC_SOURCES ${SRC_DIR}/BattleVisitor.cpp)
+
 # Создание исполняемого файла для основной программы
-add_executable(lr_06_exe main.cpp ${SRC_SOURCES})
+add_executable(lr_06 main.cpp ${SRC_SOURCES})
 
 # Настройка тестов
 enable_testing()
 
 # Автоматическое добавление всех файлов из директории test
-file(GLOB_RECURSE TEST_SOURCES LIST_DIRECTORIES false ${CMAKE_CURRENT_SOURCE_DIR}/test/*.cpp)
+file(GLOB_RECURSE TEST_SOURCES LIST_DIRECTORIES false ${TEST_DIR}/*.cpp)
 
 # Создание исполняемого файла для тестов
 add_executable(tests ${TEST_SOURCES} ${SRC_SOURCES})  # Линкование тестов с исходниками
