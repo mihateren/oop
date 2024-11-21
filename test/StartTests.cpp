@@ -1,9 +1,4 @@
 #include <gtest/gtest.h>
-#include "./IteratorTest.hpp"
-#include "./ConstIteratorTest.hpp"
-#include "./DynamicArrayIntTest.hpp"
-#include "./DynamicArrayStructTest.hpp"
-// #include "./MemoryResourceTest.hpp"
 
 int main(int argc, char **argv)
 {
