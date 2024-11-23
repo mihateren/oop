@@ -18,6 +18,8 @@ std::shared_ptr<NPC> (&Battlefield::getField())[500][500]
 
 void Battlefield::placeNPC(std::shared_ptr<NPC> npc)
 {
+    if (!npc)
+        return;
     int x = npc->getPosition().x;
     int y = npc->getPosition().y;
     if (x >= 0 && x < 500 && y >= 0 && y < 500)
@@ -45,6 +47,8 @@ void Battlefield::removeNPC(int x, int y)
 
 void Battlefield::findTargets(std::shared_ptr<NPC> npc, BattleVisitor &battleVisitor, std::vector<std::shared_ptr<NPC>> &targets)
 {
+    if (!npc)
+        return;
     int attackDistance = npc->getAttackDistance();
     int startX = std::max(0, npc->getPosition().x - attackDistance);
     int endX = std::min(499, npc->getPosition().x + attackDistance);
@@ -60,8 +64,8 @@ void Battlefield::findTargets(std::shared_ptr<NPC> npc, BattleVisitor &battleVis
             {
                 int dx = nx - npc->getPosition().x;
                 int dy = ny - npc->getPosition().y;
-                double distance = std::sqrt(dx * dx + dy * dy);
-                if (distance <= attackDistance)
+                double squaredDistance = dx * dx + dy * dy;
+                if (squaredDistance <= attackDistance * attackDistance)
                 {
                     targets.push_back(target);
                 }

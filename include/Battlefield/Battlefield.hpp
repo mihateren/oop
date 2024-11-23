@@ -2,13 +2,13 @@
 
 #include <memory>
 #include <vector>
-#include <cmath>
 #include "../Mobs/NPC.hpp"
 
 class Battlefield
 {
 public:
     Battlefield();
+
     std::shared_ptr<NPC> (&getField())[500][500];
 
     void placeNPC(std::shared_ptr<NPC> npc);

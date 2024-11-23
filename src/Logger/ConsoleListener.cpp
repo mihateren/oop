@@ -2,7 +2,7 @@
 
 void ConsoleListener::onDamageReceived(const NPC &defender, int damage, const NPC &attacker)
 {
-    std::cout << defender.getType() << " получает " << damage << " урона от " << attacker.getType() << std::endl;
+    std::cout << defender.getType() << " получает " << damage << " урона от " << attacker.getType() << ". ХП: " << defender.getHP() << std::endl;
 }
 
 void ConsoleListener::onDead(const NPC &npc)

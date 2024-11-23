@@ -19,7 +19,10 @@ void GameController::updateGame(BattleVisitor &battleVisitor)
 
     while (battleContinues)
     {
+        logger.notifyTurnStart(turnCount);
+
         attackNPCs(battleVisitor);
+        checkDeadNPCs();
 
         battleContinues = !isBattleEnd(battleVisitor);
 
@@ -34,8 +37,7 @@ void GameController::endGame()
 
 void GameController::attackNPCs(BattleVisitor &battleVisitor)
 {
-    int turn = 1;
-
+    std::vector<std::shared_ptr<NPC>> aliveNPCs;
     for (int x = 0; x < 500; ++x)
     {
         for (int y = 0; y < 500; ++y)
@@ -43,38 +45,40 @@ void GameController::attackNPCs(BattleVisitor &battleVisitor)
             auto npc = battlefield.getNPC(x, y);
             if (npc && npc->getHP() > 0)
             {
-                logger.notifyTurnStart(turn++);
+                aliveNPCs.push_back(npc);
+            }
+        }
+    }
 
-                std::vector<std::shared_ptr<NPC>> targets;
-                battlefield.findTargets(npc, battleVisitor, targets);
+    for (auto &npc : aliveNPCs)
+    {
+        if (!npc)
+            continue;
+        std::vector<std::shared_ptr<NPC>> targets;
+        battlefield.findTargets(npc, battleVisitor, targets);
 
-                for (auto it = targets.begin(); it != targets.end();)
-                {
-                    if ((*it)->getHP() <= 0)
-                    {
-                        it = targets.erase(it);
-                    }
-                    else
-                    {
-                        ++it;
-                    }
-                }
+        auto it = targets.begin();
+        while (it != targets.end())
+        {
+            if (!(*it) || (*it)->getHP() <= 0)
+            {
+                it = targets.erase(it);
+            }
+            else
+            {
+                ++it;
+            }
+        }
 
-                if (!targets.empty())
-                {
-                    for (auto &target : targets)
-                    {
-                        npc->accept(battleVisitor, *target);
+        if (!targets.empty())
+        {
+            for (auto &target : targets)
+            {
+                if (!target)
+                    continue;
+                target->accept(battleVisitor, *npc);
 
-                        logger.notifyDamageReceived(*target, npc->getAttackPower(), *npc);
-
-                        if (target->getHP() <= 0)
-                        {
-                            logger.notifyDead(*target);
-                            battlefield.removeNPC(target->getPosition().x, target->getPosition().y);
-                        }
-                    }
-                }
+                logger.notifyDamageReceived(*target, npc->getAttackPower(), *npc);
             }
         }
     }
@@ -91,6 +95,7 @@ void GameController::checkDeadNPCs()
             {
                 logger.notifyDead(*npc);
                 battlefield.removeNPC(x, y);
+                npc.reset();
             }
         }
     }
@@ -124,7 +129,9 @@ bool GameController::isBattleEnd(BattleVisitor &battleVisitor)
     {
         if (aliveCount == 1)
         {
-            logger.notifyDead(*battlefield.getNPC(0, 0));
+            auto npc = battlefield.getNPC(0, 0);
+            if (npc)
+                logger.notifyDead(*npc);
         }
         return true;
     }

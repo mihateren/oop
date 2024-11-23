@@ -18,14 +18,10 @@ void BattleVisitor::visit(const NPC &attacker, Druid &druid)
 void BattleVisitor::attack(const NPC &attacker, NPC &defender) const
 {
 
-    if (strcmp(attacker.getType(), "Белка") == 0)
-    {
-        return;
-    }
-
     int attackPower = attacker.getAttackPower();
 
     int defenderHP = defender.getHP();
     defenderHP = std::max(defenderHP - attackPower, 0);
+
     defender.setHP(defenderHP);
 }
