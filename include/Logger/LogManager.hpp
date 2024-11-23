@@ -7,7 +7,7 @@
 class NPC;
 class Battlefield;
 
-class NotificationManager
+class LogManager
 {
 public:
     void addListener(std::shared_ptr<Listener> listener) { listeners.push_back(listener); }

@@ -1,22 +1,22 @@
 #include "include/NPCFactory.hpp"
 #include "include/BattleVisitor.hpp"
 #include "include/Battlefield/Battlefield.hpp"
-#include "include/Observer/ConsoleListener.hpp"
-#include "include/Observer/NotificationManager.hpp"
+#include "include/Logger/ConsoleListener.hpp"
+#include "include/Logger/LogManager.hpp"
 #include <cstdlib>
 #include <ctime>
 #include <memory>
 
 int main()
 {
-    NotificationManager notificationManager;
+    LogManager LogManager;
     std::shared_ptr<Listener> consoleListener = std::make_shared<ConsoleListener>();
 
-    notificationManager.addListener(consoleListener);
+    LogManager.addListener(consoleListener);
 
     NPCFactory fabric;
     BattleVisitor battleVisitor;
-    Battlefield battlefield(notificationManager);
+    Battlefield battlefield(LogManager);
 
     std::srand(static_cast<unsigned int>(std::time(nullptr)));
 

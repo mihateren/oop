@@ -1,10 +1,9 @@
 #include "../../include/Battlefield/Battlefield.hpp"
 #include <cmath>
 
-Battlefield::Battlefield(NotificationManager &notificationManager)
-    : notificationManager(notificationManager)
+Battlefield::Battlefield(LogManager &LogManager)
+    : logger(LogManager)
 {
-    // Инициализация поля
     for (int i = 0; i < 500; ++i)
     {
         for (int j = 0; j < 500; ++j)
@@ -59,7 +58,7 @@ void Battlefield::print() const
 
 void Battlefield::startBattle(BattleVisitor &battleVisitor)
 {
-    notificationManager.notifyGameStart(*this);
+    logger.notifyGameStart(*this);
 
     bool battleContinues = true;
 
@@ -70,7 +69,7 @@ void Battlefield::startBattle(BattleVisitor &battleVisitor)
         battleContinues = !isBattleEnd(battleVisitor);
     }
 
-    notificationManager.notifyGameEnd();
+    logger.notifyGameEnd();
 }
 
 void Battlefield::attackNPCs(BattleVisitor &battleVisitor)
@@ -93,7 +92,7 @@ void Battlefield::attackNPCs(BattleVisitor &battleVisitor)
                         target->accept(battleVisitor, *npc);
                         if (target->getHP() <= 0)
                         {
-                            notificationManager.notifyDead(*target);
+                            logger.notifyDead(*target);
                             removeNPC(target->getPosition().x, target->getPosition().y);
                             it = targets.erase(it);
                         }
@@ -144,7 +143,7 @@ void Battlefield::checkDeadNPCs()
             auto npc = getNPC(x, y);
             if (npc && npc->getHP() <= 0)
             {
-                notificationManager.notifyDead(*npc);
+                logger.notifyDead(*npc);
                 removeNPC(x, y);
             }
         }
@@ -183,7 +182,7 @@ bool Battlefield::isBattleEnd(BattleVisitor &battleVisitor)
 
     if (aliveCount == 1)
     {
-        notificationManager.notifyDead(*aliveNPCs[0]);
+        logger.notifyDead(*aliveNPCs[0]);
     }
 
     return aliveCount <= 1 || !canAttack;
