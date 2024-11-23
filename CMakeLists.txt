@@ -28,6 +28,7 @@ set(TEST_DIR ${CMAKE_CURRENT_SOURCE_DIR}/test)  # Папка с тестами
 # Указываем, что все заголовочные файлы находятся в директории include и её поддиректориях
 include_directories(${INCLUDE_DIR})
 include_directories(${INCLUDE_DIR}/Mobs)
+include_directories(${INCLUDE_DIR}/Battlefield)
 
 # Добавляем исходные файлы из папки src
 file(GLOB_RECURSE SRC_SOURCES LIST_DIRECTORIES false ${SRC_DIR}/*.cpp ${SRC_DIR}/*.tpp)

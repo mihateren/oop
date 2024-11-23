@@ -9,9 +9,10 @@ private:
     int health;
     int attackDistance;
     int attackPower;
+    Point position;
 
 public:
-    Druid(int health = 80, int attackDistance = 10, int attackPower = 30) : health(health), attackDistance(attackDistance), attackPower(attackPower) {};
+    Druid(int health = 80, int attackDistance = 10, int attackPower = 30, int x = 0, int y = 0) : health(health), attackDistance(attackDistance), attackPower(attackPower), position(x, y) {};
 
     void accept(BattleVisitor &battleVisitor, const NPC &attacker) override
     {

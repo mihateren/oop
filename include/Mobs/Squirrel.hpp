@@ -9,9 +9,10 @@ private:
     int health;
     int attackDistance;
     int attackPower;
+    Point position;
 
 public:
-    Squirrel(int health = 10, int attackDistance = 1, int attackPower = 0) : health(health), attackDistance(attackDistance), attackPower(attackPower) {};
+    Squirrel(int health = 10, int attackDistance = 1, int attackPower = 0, int x = 0, int y = 0) : health(health), attackDistance(attackDistance), attackPower(attackPower), position(x, y) {};
 
     void accept(BattleVisitor &battleVisitor, const NPC &attacker) override
     {

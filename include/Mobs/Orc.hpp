@@ -9,10 +9,11 @@ private:
     int health;
     int attackDistance;
     int attackPower;
+    Point position;
 
 public:
-    Orc(int health = 100, int attackDistance = 5, int attackPower = 40)
-        : health(health), attackDistance(attackDistance), attackPower(attackPower) {}
+    Orc(int health = 100, int attackDistance = 5, int attackPower = 40, int x = 0, int y = 0)
+        : health(health), attackDistance(attackDistance), attackPower(attackPower), position(x, y) {}
 
     void accept(BattleVisitor &battleVisitor, const NPC &attacker) override
     {
