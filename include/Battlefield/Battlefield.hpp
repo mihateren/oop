@@ -1,8 +1,11 @@
 #pragma once
 #include "Point.hpp"
 #include "../NPC.hpp"
+#include "../BattleVisitor.hpp"
 #include <vector>
+#include <cmath>
 #include <memory>
+#include <iostream>
 
 class Battlefield
 {
@@ -12,28 +15,19 @@ private:
 public:
     Battlefield() : field(500, std::vector<std::shared_ptr<NPC>>(500, nullptr)) {}
 
-    void placeNPC(int x, int y, std::shared_ptr<NPC> npc)
-    {
-        if (x >= 0 && x < 500 && y >= 0 && y < 500)
-        {
-            field[x][y] = npc;
-        }
-    }
+    void placeNPC(std::shared_ptr<NPC> npc);
 
-    std::shared_ptr<NPC> getNPC(int x, int y) const
-    {
-        if (x >= 0 && x < 500 && y >= 0 && y < 500)
-        {
-            return field[x][y];
-        }
-        return nullptr;
-    }
+    std::shared_ptr<NPC> getNPC(int x, int y) const;
 
-    void removeNPC(int x, int y)
-    {
-        if (x >= 0 && x < 500 && y >= 0 && y < 500)
-        {
-            field[x][y] = nullptr;
-        }
-    }
+    void removeNPC(int x, int y);
+
+    void startBattle(BattleVisitor &battleVisitor);
+
+    void print() const;
+
+private:
+    void attackNPCs(BattleVisitor &battleVisitor);
+    void checkDeadNPCs();
+    bool isBattleEnd(BattleVisitor &battleVisitor);
+    void findTargets(std::shared_ptr<NPC> npc, BattleVisitor &battleVisitor, std::vector<std::shared_ptr<NPC>> &targets);
 };

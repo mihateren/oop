@@ -3,33 +3,37 @@
 #include "../include/Mobs/Orc.hpp"
 #include "../include/Mobs/Squirrel.hpp"
 #include "../include/Mobs/Druid.hpp"
+#include <cstring>
 
 void BattleVisitor::visit(const NPC &attacker, Orc &orc)
 {
-    std::cout << attacker.getType() << " атакует Орка." << std::endl;
     attack(attacker, orc);
 }
 
 void BattleVisitor::visit(const NPC &attacker, Squirrel &squirrel)
 {
-    std::cout << "Атакующий: " << attacker.getType() << " атакует Белку." << std::endl;
     attack(attacker, squirrel);
 }
 
 void BattleVisitor::visit(const NPC &attacker, Druid &druid)
 {
-    std::cout << "Атакующий: " << attacker.getType() << " атакует Друида." << std::endl;
     attack(attacker, druid);
 }
 
 void BattleVisitor::attack(const NPC &attacker, NPC &defender) const
 {
-    int attackerPower = attacker.getAttackPower();
+
+    if (strcmp(attacker.getType(), "Белка") == 0)
+    {
+        std::cout << "Белка в шоке моргнула" << std::endl;
+        return;
+    }
+
+    int attackPower = attacker.getAttackPower();
+
     int defenderHP = defender.getHP();
-    int damage = attackerPower;
+    defenderHP = std::max(defenderHP - attackPower, 0);
+    defender.setHP(defenderHP);
 
-    defender.setHP(defenderHP - damage);
-
-    std::cout << "Атакующий нанес " << damage << " урона!" << std::endl;
-    std::cout << "Здоровье защищающегося: " << defender.getHP() << std::endl;
+    std::cout << attacker.getType() << " атакует " << defender.getType() << ". Здоровье " << defender.getType() << ": " << defenderHP  << std::endl;
 }

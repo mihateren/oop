@@ -23,5 +23,7 @@ public:
     int getHP() const override { return health; }
     void setHP(int hp) override { health = hp; }
     int getAttackPower() const override { return attackPower; }
+    int getAttackDistance() const { return attackDistance; }
+    const Point &getPosition() const override { return position; }
     const char *getType() const override { return "Орк"; }
 };

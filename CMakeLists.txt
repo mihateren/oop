@@ -20,32 +20,49 @@ FetchContent_Declare(
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
-# Установка директорий
-set(INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include)
-set(SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)  # Папка с исходными файлами
-set(TEST_DIR ${CMAKE_CURRENT_SOURCE_DIR}/test)  # Папка с тестами
+# Указываем директорию, в которой находятся все заголовочные файлы
+set(INCLUDE_DIR ${CMAKE_SOURCE_DIR}/include)
 
-# Указываем, что все заголовочные файлы находятся в директории include и её поддиректориях
-include_directories(${INCLUDE_DIR})
-include_directories(${INCLUDE_DIR}/Mobs)
-include_directories(${INCLUDE_DIR}/Battlefield)
+# Указываем директорию, в которой находятся все исходные файлы
+set(SRC_DIR ${CMAKE_SOURCE_DIR}/src)
 
-# Добавляем исходные файлы из папки src
+# Указываем директорию, в которой находятся все тестовые файлы
+set(TEST_DIR ${CMAKE_SOURCE_DIR}/test)
+
+# Находим все заголовочные файлы в директории и её поддиректориях
+file(GLOB_RECURSE HEADERS ${INCLUDE_DIR}/*.hpp)
+
+# Находим все исходные файлы в директории и её поддиректориях
 file(GLOB_RECURSE SRC_SOURCES LIST_DIRECTORIES false ${SRC_DIR}/*.cpp ${SRC_DIR}/*.tpp)
 
-# Создание исполняемого файла для основной программы
-add_executable(lr_06 main.cpp ${SRC_SOURCES})
-
-# Настройка тестов
-enable_testing()
-
-# Автоматическое добавление всех файлов из директории test
+# Находим все тестовые файлы в директории и её поддиректориях
 file(GLOB_RECURSE TEST_SOURCES LIST_DIRECTORIES false ${TEST_DIR}/*.cpp)
 
-# Создание исполняемого файла для тестов
-add_executable(tests ${TEST_SOURCES} ${SRC_SOURCES})  # Линкование тестов с исходниками
+# Добавляем все найденные директории в список включаемых директорий
+foreach(HEADER ${HEADERS})
+    get_filename_component(HEADER_DIR ${HEADER} DIRECTORY)
+    include_directories(${HEADER_DIR})
+endforeach()
 
-# Линковка с библиотеками
+# Добавляем исходные файлы проекта
+set(SOURCE_FILES
+    main.cpp
+    ${SRC_SOURCES}
+)
+
+# Добавляем исполняемый файл
+add_executable(lr6 ${SOURCE_FILES})
+
+# Добавляем директории с заголовочными файлами для исполняемого файла
+target_include_directories(lr6 PRIVATE ${INCLUDE_DIR})
+
+# Добавляем исполняемый файл для тестов
+add_executable(tests ${TEST_SOURCES})
+
+# Добавляем директории с заголовочными файлами для тестов
+target_include_directories(tests PRIVATE ${INCLUDE_DIR})
+
+# Линковка с библиотеками для тестов
 target_link_libraries(tests PRIVATE gtest gtest_main)
 
 # Регистрация тестов для запуска
