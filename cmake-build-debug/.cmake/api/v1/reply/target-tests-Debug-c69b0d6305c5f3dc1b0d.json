@@ -2,10 +2,10 @@
 	"artifacts" : 
 	[
 		{
-			"path" : "lr6.exe"
+			"path" : "tests.exe"
 		},
 		{
-			"path" : "lr6.pdb"
+			"path" : "tests.pdb"
 		}
 	],
 	"backtrace" : 1,
@@ -14,6 +14,7 @@
 		"commands" : 
 		[
 			"add_executable",
+			"target_link_libraries",
 			"include_directories"
 		],
 		"files" : 
@@ -28,29 +29,41 @@
 			{
 				"command" : 0,
 				"file" : 0,
-				"line" : 54,
+				"line" : 60,
 				"parent" : 0
 			},
 			{
 				"command" : 1,
 				"file" : 0,
-				"line" : 44,
+				"line" : 66,
 				"parent" : 0
 			},
 			{
-				"command" : 1,
+				"command" : 2,
 				"file" : 0,
 				"line" : 44,
 				"parent" : 0
 			},
 			{
-				"command" : 1,
+				"command" : 2,
 				"file" : 0,
 				"line" : 44,
 				"parent" : 0
 			},
 			{
-				"command" : 1,
+				"command" : 2,
+				"file" : 0,
+				"line" : 44,
+				"parent" : 0
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 44,
+				"parent" : 0
+			},
+			{
+				"command" : 2,
 				"file" : 0,
 				"line" : 44,
 				"parent" : 0
@@ -69,20 +82,34 @@
 			"includes" : 
 			[
 				{
-					"backtrace" : 2,
-					"path" : "D:/mai/2/oop/include"
-				},
-				{
 					"backtrace" : 3,
 					"path" : "D:/mai/2/oop/include/Battlefield"
 				},
 				{
 					"backtrace" : 4,
-					"path" : "D:/mai/2/oop/include/Mobs"
+					"path" : "D:/mai/2/oop/include"
 				},
 				{
 					"backtrace" : 5,
-					"path" : "D:/mai/2/oop/include/Observer"
+					"path" : "D:/mai/2/oop/include/Logger"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "D:/mai/2/oop/include/Mobs"
+				},
+				{
+					"backtrace" : 7,
+					"path" : "D:/mai/2/oop/include/Mobs/Visitors"
+				},
+				{
+					"backtrace" : 2,
+					"isSystem" : true,
+					"path" : "D:/mai/2/oop/cmake-build-debug/_deps/googletest-src/googletest/include"
+				},
+				{
+					"backtrace" : 2,
+					"isSystem" : true,
+					"path" : "D:/mai/2/oop/cmake-build-debug/_deps/googletest-src/googletest"
 				}
 			],
 			"language" : "CXX",
@@ -90,19 +117,28 @@
 			{
 				"backtraces" : 
 				[
-					1
+					2
 				],
 				"standard" : "20"
 			},
 			"sourceIndexes" : 
 			[
-				0,
-				1,
-				2
+				0
 			]
 		}
 	],
-	"id" : "lr6::@6890427a1f51a3e7e1df",
+	"dependencies" : 
+	[
+		{
+			"backtrace" : 2,
+			"id" : "gtest_main::@1ea2dfc0605fe3ab2a3f"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "gtest::@1ea2dfc0605fe3ab2a3f"
+		}
+	],
+	"id" : "tests::@6890427a1f51a3e7e1df",
 	"link" : 
 	{
 		"commandFragments" : 
@@ -116,14 +152,29 @@
 				"role" : "flags"
 			},
 			{
+				"backtrace" : 2,
+				"fragment" : "lib\\libgtest.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 2,
+				"fragment" : "lib\\libgtest_main.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 2,
+				"fragment" : "lib\\libgtest.a",
+				"role" : "libraries"
+			},
+			{
 				"fragment" : "-lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32",
 				"role" : "libraries"
 			}
 		],
 		"language" : "CXX"
 	},
-	"name" : "lr6",
-	"nameOnDisk" : "lr6.exe",
+	"name" : "tests",
+	"nameOnDisk" : "tests.exe",
 	"paths" : 
 	{
 		"build" : ".",
@@ -135,9 +186,7 @@
 			"name" : "Source Files",
 			"sourceIndexes" : 
 			[
-				0,
-				1,
-				2
+				0
 			]
 		}
 	],
@@ -146,19 +195,7 @@
 		{
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
-			"path" : "main.cpp",
-			"sourceGroupIndex" : 0
-		},
-		{
-			"backtrace" : 1,
-			"compileGroupIndex" : 0,
-			"path" : "src/BattleVisitor.cpp",
-			"sourceGroupIndex" : 0
-		},
-		{
-			"backtrace" : 1,
-			"compileGroupIndex" : 0,
-			"path" : "src/Battlefield/Battlefield.cpp",
+			"path" : "test/StartTests.cpp",
 			"sourceGroupIndex" : 0
 		}
 	],

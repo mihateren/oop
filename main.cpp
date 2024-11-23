@@ -1,31 +1,33 @@
 #include "include/Mobs/Visitors/BattleVisitor.hpp"
 #include "include/NPCFactory.hpp"
-#include "include/Battlefield/Battlefield.hpp"
 #include "include/Logger/ConsoleListener.hpp"
 #include "include/Logger/LogManager.hpp"
+#include "include/Battlefield/Battlefield.hpp"
+#include "include/GameController.hpp"
 #include <cstdlib>
 #include <ctime>
 #include <memory>
 
 int main()
 {
-    LogManager LogManager;
+    LogManager logManager;
     std::shared_ptr<Listener> consoleListener = std::make_shared<ConsoleListener>();
-
-    LogManager.addListener(consoleListener);
+    logManager.addListener(consoleListener);
 
     NPCFactory fabric;
     BattleVisitor battleVisitor;
-    Battlefield battlefield(LogManager);
+    Battlefield battlefield;
+
+    GameController gameController(logManager, battlefield);
 
     std::srand(static_cast<unsigned int>(std::time(nullptr)));
 
-    int x1 = std::rand() % 20;
-    int y1 = std::rand() % 20;
-    int x2 = std::rand() % 20;
-    int y2 = std::rand() % 20;
-    int x3 = std::rand() % 20;
-    int y3 = std::rand() % 20;
+    int x1 = std::rand() % 10;
+    int y1 = std::rand() % 10;
+    int x2 = std::rand() % 10;
+    int y2 = std::rand() % 10;
+    int x3 = std::rand() % 10;
+    int y3 = std::rand() % 10;
 
     auto orc = fabric.createNPC(NPCType::Orc, x1, y1);
     auto squirrel = fabric.createNPC(NPCType::Squirrel, x2, y2);
@@ -35,9 +37,9 @@ int main()
     battlefield.placeNPC(squirrel);
     battlefield.placeNPC(druid);
 
-    battlefield.print();
+    gameController.startGame(battleVisitor);
 
-    battlefield.startBattle(battleVisitor);
+    gameController.endGame();
 
     return 0;
 }

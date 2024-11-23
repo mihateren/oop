@@ -1,4 +1,4 @@
-#include "../include/Mobs/Visitors/BattleVisitor.hpp"
+#include "../../include/Mobs/Visitors/BattleVisitor.hpp"
 
 void BattleVisitor::visit(const NPC &attacker, Orc &orc)
 {
@@ -28,5 +28,4 @@ void BattleVisitor::attack(const NPC &attacker, NPC &defender) const
     int defenderHP = defender.getHP();
     defenderHP = std::max(defenderHP - attackPower, 0);
     defender.setHP(defenderHP);
-    std::cout << attacker.getType() << " атакует " << defender.getType() << ". Здоровье " << defender.getType() << ": " << defenderHP << std::endl;
 }
