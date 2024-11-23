@@ -1,5 +1,5 @@
+#include "include/Mobs/Visitors/BattleVisitor.hpp"
 #include "include/NPCFactory.hpp"
-#include "include/BattleVisitor.hpp"
 #include "include/Battlefield/Battlefield.hpp"
 #include "include/Logger/ConsoleListener.hpp"
 #include "include/Logger/LogManager.hpp"

@@ -3,8 +3,8 @@
 #include <memory>
 #include <vector>
 #include <iostream>
-#include "../NPC.hpp"
-#include "../BattleVisitor.hpp"
+#include "../Mobs/NPC.hpp"
+#include "../Mobs/Visitors/BattleVisitor.hpp"
 #include "../Logger/LogManager.hpp"
 
 class Battlefield

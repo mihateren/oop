@@ -1,9 +1,4 @@
-#include "../include/BattleVisitor.hpp"
-#include "../include/NPC.hpp"
-#include "../include/Mobs/Orc.hpp"
-#include "../include/Mobs/Squirrel.hpp"
-#include "../include/Mobs/Druid.hpp"
-#include <cstring>
+#include "../include/Mobs/Visitors/BattleVisitor.hpp"
 
 void BattleVisitor::visit(const NPC &attacker, Orc &orc)
 {

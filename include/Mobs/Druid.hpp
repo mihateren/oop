@@ -1,7 +1,8 @@
 #pragma once
 
-#include "../NPC.hpp"
-#include "../BattleVisitor.hpp"
+#include "NPC.hpp"
+
+class BattleVisitor;
 
 class Druid : public NPC
 {
@@ -14,10 +15,7 @@ private:
 public:
     Druid(int health = 80, int attackDistance = 10, int attackPower = 30, int x = 0, int y = 0) : health(health), attackDistance(attackDistance), attackPower(attackPower), position(x, y) {};
 
-    void accept(BattleVisitor &battleVisitor, const NPC &attacker) override
-    {
-        battleVisitor.visit(attacker, *this);
-    }
+    void accept(BattleVisitor &battleVisitor, const NPC &attacker) override;
 
     int getHP() const override { return health; }
     void setHP(int hp) override { health = hp; }

@@ -1,7 +1,8 @@
 #pragma once
 
-#include "../NPC.hpp"
-#include "../BattleVisitor.hpp"
+#include "NPC.hpp"
+
+#include "./Visitors/BattleVisitor.hpp"
 
 class Squirrel : public NPC
 {
@@ -14,10 +15,7 @@ private:
 public:
     Squirrel(int health = 10, int attackDistance = 1, int attackPower = 0, int x = 0, int y = 0) : health(health), attackDistance(attackDistance), attackPower(attackPower), position(x, y) {};
 
-    void accept(BattleVisitor &battleVisitor, const NPC &attacker) override
-    {
-        battleVisitor.visit(attacker, *this);
-    }
+    void accept(BattleVisitor &battleVisitor, const NPC &attacker) override;
 
     int getHP() const override { return health; }
     void setHP(int hp) override { health = hp; }

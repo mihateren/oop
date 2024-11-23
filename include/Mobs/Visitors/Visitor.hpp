@@ -1,7 +1,6 @@
 #pragma once
 
-#include "NPC.hpp"
-
+class NPC;
 class Orc;
 class Squirrel;
 class Druid;

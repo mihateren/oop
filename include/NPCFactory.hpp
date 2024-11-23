@@ -2,7 +2,7 @@
 
 #include <memory>
 #include <stdexcept>
-#include "NPC.hpp"
+#include "Mobs/NPC.hpp"
 #include "Mobs/Orc.hpp"
 #include "Mobs/Squirrel.hpp"
 #include "Mobs/Druid.hpp"

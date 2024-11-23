@@ -1,11 +1,12 @@
 #pragma once
 
-class Orc;
-class Squirrel;
-class Druid;
-class NPC;
-
 #include "Visitor.hpp"
+#include "../NPC.hpp"
+#include "../Orc.hpp"
+#include "../Squirrel.hpp"
+#include "../include/Mobs/Druid.hpp"
+#include <cstring>
+#include <iostream>
 
 class BattleVisitor : public Visitor
 {
