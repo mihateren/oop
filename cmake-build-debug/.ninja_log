@@ -1,0 +1,9 @@
+# ninja log v6
+13	523	7540962108868375	CMakeFiles/lr6.dir/src/BattleVisitor.cpp.obj	78d7cc13f10e3285
+6	764	7540962108802363	CMakeFiles/lr6.dir/main.cpp.obj	22be61cbb5943172
+18	782	7540962108922322	CMakeFiles/lr6.dir/src/Battlefield/Battlefield.cpp.obj	b865a54e90566aea
+782	922	7540962116566615	lr6.exe	f0cd81eb3b3a4a60
+5	529	7540962191878576	CMakeFiles/lr6.dir/main.cpp.obj	22be61cbb5943172
+529	643	7540962197127185	lr6.exe	f0cd81eb3b3a4a60
+12	617	7540963617497650	CMakeFiles/lr6.dir/main.cpp.obj	22be61cbb5943172
+617	737	7540963623547505	lr6.exe	f0cd81eb3b3a4a60

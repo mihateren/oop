@@ -25,7 +25,6 @@ void BattleVisitor::attack(const NPC &attacker, NPC &defender) const
 
     if (strcmp(attacker.getType(), "Белка") == 0)
     {
-        std::cout << "Белка в шоке моргнула" << std::endl;
         return;
     }
 
@@ -34,6 +33,5 @@ void BattleVisitor::attack(const NPC &attacker, NPC &defender) const
     int defenderHP = defender.getHP();
     defenderHP = std::max(defenderHP - attackPower, 0);
     defender.setHP(defenderHP);
-
-    std::cout << attacker.getType() << " атакует " << defender.getType() << ". Здоровье " << defender.getType() << ": " << defenderHP  << std::endl;
+    std::cout << attacker.getType() << " атакует " << defender.getType() << ". Здоровье " << defender.getType() << ": " << defenderHP << std::endl;
 }

@@ -1,4 +1,18 @@
 #include "../../include/Battlefield/Battlefield.hpp"
+#include <cmath>
+
+Battlefield::Battlefield(NotificationManager &notificationManager)
+    : notificationManager(notificationManager)
+{
+    // Инициализация поля
+    for (int i = 0; i < 500; ++i)
+    {
+        for (int j = 0; j < 500; ++j)
+        {
+            field[i][j] = nullptr;
+        }
+    }
+}
 
 void Battlefield::placeNPC(std::shared_ptr<NPC> npc)
 {
@@ -45,6 +59,8 @@ void Battlefield::print() const
 
 void Battlefield::startBattle(BattleVisitor &battleVisitor)
 {
+    notificationManager.notifyGameStart(*this);
+
     bool battleContinues = true;
 
     while (battleContinues)
@@ -54,7 +70,7 @@ void Battlefield::startBattle(BattleVisitor &battleVisitor)
         battleContinues = !isBattleEnd(battleVisitor);
     }
 
-    std::cout << "Бой окончен." << std::endl;
+    notificationManager.notifyGameEnd();
 }
 
 void Battlefield::attackNPCs(BattleVisitor &battleVisitor)
@@ -68,17 +84,21 @@ void Battlefield::attackNPCs(BattleVisitor &battleVisitor)
             {
                 std::vector<std::shared_ptr<NPC>> targets;
                 findTargets(npc, battleVisitor, targets);
-                std::string name = npc->getType();
-                if (!targets.empty()) {
+                if (!targets.empty())
+                {
                     auto it = targets.begin();
-                    while (it != targets.end()) {
+                    while (it != targets.end())
+                    {
                         auto target = *it;
                         target->accept(battleVisitor, *npc);
-                        if (target->getHP() <= 0) {
-                            std::cout << target->getType() << " погибает." << std::endl;
+                        if (target->getHP() <= 0)
+                        {
+                            notificationManager.notifyDead(*target);
                             removeNPC(target->getPosition().x, target->getPosition().y);
                             it = targets.erase(it);
-                        } else {
+                        }
+                        else
+                        {
                             ++it;
                         }
                     }
@@ -124,7 +144,7 @@ void Battlefield::checkDeadNPCs()
             auto npc = getNPC(x, y);
             if (npc && npc->getHP() <= 0)
             {
-                std::cout << npc->getType() << " погибает." << std::endl;
+                notificationManager.notifyDead(*npc);
                 removeNPC(x, y);
             }
         }
@@ -163,7 +183,7 @@ bool Battlefield::isBattleEnd(BattleVisitor &battleVisitor)
 
     if (aliveCount == 1)
     {
-        std::cout << "Победитель: " << aliveNPCs[0]->getType() << " (x: " << aliveNPCs[0]->getPosition().x << ", y: " << aliveNPCs[0]->getPosition().y << ")" << std::endl;
+        notificationManager.notifyDead(*aliveNPCs[0]);
     }
 
     return aliveCount <= 1 || !canAttack;
