@@ -8,7 +8,12 @@
 
 class GameController
 {
+private:
+    Battlefield *battlefield;
+    LogManager *logger;
+
 public:
+    GameController(Battlefield &battlefield);
     GameController(LogManager &logManager, Battlefield &battlefield);
     void startGame(BattleVisitor &battleVisitor);
     void updateGame(BattleVisitor &battleVisitor);
@@ -18,7 +23,4 @@ private:
     void attackNPCs(BattleVisitor &battleVisitor);
     void checkDeadNPCs();
     bool isBattleEnd(BattleVisitor &battleVisitor);
-
-    Battlefield &battlefield;
-    LogManager &logger;
 };

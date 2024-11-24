@@ -11,6 +11,18 @@ Battlefield::Battlefield()
     }
 }
 
+Battlefield::~Battlefield()
+{
+    for (int i = 0; i < 500; ++i)
+    {
+        for (int j = 0; j < 500; ++j)
+        {
+            field[i][j].reset();
+            field[i][j] = nullptr;
+        }
+    }
+}
+
 std::shared_ptr<NPC> (&Battlefield::getField())[500][500]
 {
     return field;
@@ -64,7 +76,7 @@ void Battlefield::findTargets(std::shared_ptr<NPC> npc, BattleVisitor &battleVis
             {
                 int dx = nx - npc->getPosition().x;
                 int dy = ny - npc->getPosition().y;
-                double squaredDistance = dx * dx + dy * dy;
+                int squaredDistance = dx * dx + dy * dy;
                 if (squaredDistance <= attackDistance * attackDistance)
                 {
                     targets.push_back(target);

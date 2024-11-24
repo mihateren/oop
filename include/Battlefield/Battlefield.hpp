@@ -6,8 +6,12 @@
 
 class Battlefield
 {
+private:
+    std::shared_ptr<NPC> field[500][500];
+
 public:
     Battlefield();
+    ~Battlefield();
 
     std::shared_ptr<NPC> (&getField())[500][500];
 
@@ -16,7 +20,4 @@ public:
     std::shared_ptr<NPC> getNPC(int x, int y) const;
 
     void findTargets(std::shared_ptr<NPC> npc, BattleVisitor &battleVisitor, std::vector<std::shared_ptr<NPC>> &targets);
-
-private:
-    std::shared_ptr<NPC> field[500][500];
 };

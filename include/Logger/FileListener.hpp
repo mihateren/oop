@@ -7,6 +7,9 @@
 
 class FileListener : public Listener
 {
+private:
+    std::ofstream logFile;
+
 public:
     FileListener();
     ~FileListener();
@@ -16,7 +19,4 @@ public:
     void onGameStart(Battlefield &battlefield) override;
     void onTurnStart(int turn) override;
     void onGameEnd() override;
-
-private:
-    std::ofstream logFile;
 };

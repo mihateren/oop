@@ -1,14 +1,22 @@
 #include "GameController.hpp"
 #include <iostream>
 
+GameController::GameController(Battlefield &battlefield)
+    : battlefield(&battlefield), logger(nullptr)
+{
+}
+
 GameController::GameController(LogManager &logManager, Battlefield &battlefield)
-    : logger(logManager), battlefield(battlefield)
+    : logger(&logManager), battlefield(&battlefield)
 {
 }
 
 void GameController::startGame(BattleVisitor &battleVisitor)
 {
-    logger.notifyGameStart(battlefield);
+    if (logger)
+    {
+        logger->notifyGameStart(*battlefield);
+    }
     updateGame(battleVisitor);
 }
 
@@ -19,7 +27,10 @@ void GameController::updateGame(BattleVisitor &battleVisitor)
 
     while (battleContinues)
     {
-        logger.notifyTurnStart(turnCount);
+        if (logger)
+        {
+            logger->notifyTurnStart(turnCount);
+        }
 
         attackNPCs(battleVisitor);
         checkDeadNPCs();
@@ -32,7 +43,10 @@ void GameController::updateGame(BattleVisitor &battleVisitor)
 
 void GameController::endGame()
 {
-    logger.notifyGameEnd();
+    if (logger)
+    {
+        logger->notifyGameEnd();
+    }
 }
 
 void GameController::attackNPCs(BattleVisitor &battleVisitor)
@@ -42,7 +56,7 @@ void GameController::attackNPCs(BattleVisitor &battleVisitor)
     {
         for (int y = 0; y < 500; ++y)
         {
-            auto npc = battlefield.getNPC(x, y);
+            auto npc = battlefield->getNPC(x, y);
             if (npc && npc->getHP() > 0)
             {
                 aliveNPCs.push_back(npc);
@@ -55,7 +69,7 @@ void GameController::attackNPCs(BattleVisitor &battleVisitor)
         if (!npc)
             continue;
         std::vector<std::shared_ptr<NPC>> targets;
-        battlefield.findTargets(npc, battleVisitor, targets);
+        battlefield->findTargets(npc, battleVisitor, targets);
 
         auto it = targets.begin();
         while (it != targets.end())
@@ -78,7 +92,10 @@ void GameController::attackNPCs(BattleVisitor &battleVisitor)
                     continue;
                 target->accept(battleVisitor, *npc);
 
-                logger.notifyDamageReceived(*target, npc->getAttackPower(), *npc);
+                if (logger)
+                {
+                    logger->notifyDamageReceived(*target, npc->getAttackPower(), *npc);
+                }
             }
         }
     }
@@ -90,11 +107,14 @@ void GameController::checkDeadNPCs()
     {
         for (int y = 0; y < 500; ++y)
         {
-            auto npc = battlefield.getNPC(x, y);
+            auto npc = battlefield->getNPC(x, y);
             if (npc && npc->getHP() <= 0)
             {
-                logger.notifyDead(*npc);
-                battlefield.removeNPC(x, y);
+                if (logger)
+                {
+                    logger->notifyDead(*npc);
+                }
+                battlefield->removeNPC(x, y);
                 npc.reset();
             }
         }
@@ -110,13 +130,13 @@ bool GameController::isBattleEnd(BattleVisitor &battleVisitor)
     {
         for (int y = 0; y < 500; ++y)
         {
-            auto npc = battlefield.getNPC(x, y);
+            auto npc = battlefield->getNPC(x, y);
             if (npc && npc->getHP() > 0)
             {
                 ++aliveCount;
 
                 std::vector<std::shared_ptr<NPC>> targets;
-                battlefield.findTargets(npc, battleVisitor, targets);
+                battlefield->findTargets(npc, battleVisitor, targets);
                 if (!targets.empty())
                 {
                     canAttack = true;
@@ -129,9 +149,15 @@ bool GameController::isBattleEnd(BattleVisitor &battleVisitor)
     {
         if (aliveCount == 1)
         {
-            auto npc = battlefield.getNPC(0, 0);
+            auto npc = battlefield->getNPC(0, 0);
             if (npc)
-                logger.notifyDead(*npc);
+            {
+
+                if (logger)
+                {
+                    logger->notifyDead(*npc);
+                }
+            }
         }
         return true;
     }

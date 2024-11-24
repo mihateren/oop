@@ -33,8 +33,8 @@ add_executable(lr6 main.cpp ${SRC_SOURCES})
 target_include_directories(lr6 PRIVATE ${INCLUDE_DIR})
 
 # Добавляем исполняемый файл для тестов
-add_executable(tests ${TEST_SOURCES})
-target_include_directories(tests PRIVATE ${INCLUDE_DIR})
+add_executable(tests ${TEST_SOURCES} ${SRC_SOURCES})
+target_include_directories(tests PRIVATE ${INCLUDE_DIR} ${SRC_DIR})
 target_link_libraries(tests PRIVATE gtest gtest_main)
 
 # Регистрация тестов
