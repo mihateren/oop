@@ -1,10 +1,10 @@
 #pragma once
 
 #include "Visitor.hpp"
-#include "../NPC.hpp"
-#include "../Orc.hpp"
-#include "../Squirrel.hpp"
-#include "../include/Mobs/Druid.hpp"
+#include "Mobs/NPC.hpp"
+#include "Mobs/Orc.hpp"
+#include "Mobs/Squirrel.hpp"
+#include "Mobs/Druid.hpp"
 #include <cstring>
 #include <iostream>
 

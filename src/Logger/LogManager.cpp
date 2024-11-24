@@ -1,4 +1,4 @@
-#include "../../include/Logger/LogManager.hpp"
+#include "Logger/LogManager.hpp"
 
 void LogManager::addListener(std::shared_ptr<Listener> listener) { listeners.push_back(listener); }
 

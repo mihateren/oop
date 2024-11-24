@@ -1,9 +1,9 @@
-#include "include/Mobs/Visitors/BattleVisitor.hpp"
-#include "include/NPCFactory.hpp"
-#include "include/Logger/ConsoleListener.hpp"
-#include "include/Logger/LogManager.hpp"
-#include "include/Battlefield/Battlefield.hpp"
-#include "include/GameController.hpp"
+#include "Mobs/Visitors/BattleVisitor.hpp"
+#include "NPCFactory.hpp"
+#include "Logger/ConsoleListener.hpp"
+#include "Logger/LogManager.hpp"
+#include "Battlefield/Battlefield.hpp"
+#include "GameController.hpp"
 #include <cstdlib>
 #include <ctime>
 #include <memory>

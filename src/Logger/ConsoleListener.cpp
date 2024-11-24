@@ -1,4 +1,4 @@
-#include "../../include/Logger/ConsoleListener.hpp"
+#include "Logger/ConsoleListener.hpp"
 
 void ConsoleListener::onDamageReceived(const NPC &defender, int damage, const NPC &attacker)
 {

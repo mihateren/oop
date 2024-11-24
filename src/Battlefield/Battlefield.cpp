@@ -1,4 +1,4 @@
-#include "../../include/Battlefield/Battlefield.hpp"
+#include "Battlefield/Battlefield.hpp"
 
 Battlefield::Battlefield()
 {

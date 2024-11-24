@@ -2,7 +2,7 @@
 
 #include "NPC.hpp"
 
-#include "./Visitors/BattleVisitor.hpp"
+#include "Mobs/Visitors/BattleVisitor.hpp"
 
 class Squirrel : public NPC
 {

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Listener.hpp"
-#include "../Battlefield/Battlefield.hpp"
+#include "Battlefield/Battlefield.hpp"
 #include <iostream>
 
 class ConsoleListener : public Listener

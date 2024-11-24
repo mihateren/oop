@@ -2,7 +2,7 @@
 
 #include <iostream>
 #include <memory>
-#include "../Battlefield/Point.hpp"
+#include "Battlefield/Point.hpp"
 class BattleVisitor;
 
 class NPC

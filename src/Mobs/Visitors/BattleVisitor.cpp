@@ -1,4 +1,4 @@
-#include "../../include/Mobs/Visitors/BattleVisitor.hpp"
+#include "Mobs/Visitors/BattleVisitor.hpp"
 
 void BattleVisitor::visit(const NPC &attacker, Orc &orc)
 {

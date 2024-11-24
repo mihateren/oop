@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../include/Mobs/NPC.hpp"
+#include "Mobs/NPC.hpp"
 class BattleVisitor;
 
 class Orc : public NPC

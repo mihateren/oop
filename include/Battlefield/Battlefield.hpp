@@ -2,7 +2,7 @@
 
 #include <memory>
 #include <vector>
-#include "../Mobs/NPC.hpp"
+#include "Mobs/NPC.hpp"
 
 class Battlefield
 {

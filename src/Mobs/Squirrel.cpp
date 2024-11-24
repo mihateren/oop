@@ -1,5 +1,5 @@
-#include "../../include/Mobs/Squirrel.hpp"
-#include "../../include/Mobs/Visitors/BattleVisitor.hpp"
+#include "Mobs/Squirrel.hpp"
+#include "Mobs/Visitors/BattleVisitor.hpp"
 
 void Squirrel::accept(BattleVisitor &battleVisitor, const NPC &attacker)
 {
