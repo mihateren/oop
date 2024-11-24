@@ -1,7 +1,11 @@
 #pragma once
 
 #include <memory>
+#include <fstream>
+#include <sstream>
 #include <stdexcept>
+#include <string>
+#include <vector>
 #include "Mobs/NPC.hpp"
 #include "Mobs/Orc.hpp"
 #include "Mobs/Squirrel.hpp"
@@ -17,33 +21,12 @@ enum class NPCType
 class NPCFactory
 {
 public:
-    std::shared_ptr<NPC> createNPC(NPCType type) const
-    {
-        switch (type)
-        {
-        case NPCType::Orc:
-            return std::make_shared<Orc>();
-        case NPCType::Squirrel:
-            return std::make_shared<Squirrel>();
-        case NPCType::Druid:
-            return std::make_shared<Druid>();
-        default:
-            return nullptr;
-        }
-    }
+    std::shared_ptr<NPC> createNPC(NPCType type) const;
 
-    std::shared_ptr<NPC> createNPC(NPCType type, int x, int y) const
-    {
-        switch (type)
-        {
-        case NPCType::Orc:
-            return std::make_shared<Orc>(100, 5, 40, x, y);
-        case NPCType::Squirrel:
-            return std::make_shared<Squirrel>(10, 1, 0, x, y);
-        case NPCType::Druid:
-            return std::make_shared<Druid>(80, 10, 30, x, y);
-        default:
-            return nullptr;
-        }
-    }
+    std::shared_ptr<NPC> createNPC(NPCType type, int x, int y) const;
+
+    std::vector<std::shared_ptr<NPC>> createNPCFromFile(const std::string &filename) const;
+
+private:
+    NPCType stringToNPCType(const std::string &typeStr) const;
 };

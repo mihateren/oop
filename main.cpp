@@ -2,17 +2,22 @@
 #include "NPCFactory.hpp"
 #include "Logger/ConsoleListener.hpp"
 #include "Logger/LogManager.hpp"
+#include "Logger/FileListener.hpp"
 #include "Battlefield/Battlefield.hpp"
 #include "GameController.hpp"
 #include <cstdlib>
 #include <ctime>
 #include <memory>
+#include <iostream>
+#include <fstream>
+#include <sstream>
 
 int main()
 {
     LogManager logManager;
     std::shared_ptr<Listener> consoleListener = std::make_shared<ConsoleListener>();
-    logManager.addListener(consoleListener);
+    std::shared_ptr<Listener> fileListener = std::make_shared<FileListener>();
+    logManager.addListener(fileListener);
 
     NPCFactory fabric;
     BattleVisitor battleVisitor;
@@ -22,24 +27,23 @@ int main()
 
     std::srand(static_cast<unsigned int>(std::time(nullptr)));
 
-    int x1 = std::rand() % 10;
-    int y1 = std::rand() % 10;
-    int x2 = std::rand() % 10;
-    int y2 = std::rand() % 10;
-    int x3 = std::rand() % 10;
-    int y3 = std::rand() % 10;
+    try
+    {
+        std::vector<std::shared_ptr<NPC>> npcs = fabric.createNPCFromFile("npcs.txt");
 
-    auto orc = fabric.createNPC(NPCType::Orc, x1, y1);
-    auto squirrel = fabric.createNPC(NPCType::Squirrel, x2, y2);
-    auto druid = fabric.createNPC(NPCType::Druid, x3, y3);
+        for (const auto &npc : npcs)
+        {
+            battlefield.placeNPC(npc);
+        }
 
-    battlefield.placeNPC(orc);
-    battlefield.placeNPC(squirrel);
-    battlefield.placeNPC(druid);
+        gameController.startGame(battleVisitor);
 
-    gameController.startGame(battleVisitor);
-
-    gameController.endGame();
+        gameController.endGame();
+    }
+    catch (const std::exception &e)
+    {
+        std::cerr << "Ошибка: " << e.what() << std::endl;
+    }
 
     return 0;
 }
