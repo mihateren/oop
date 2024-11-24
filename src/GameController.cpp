@@ -71,24 +71,11 @@ void GameController::attackNPCs(BattleVisitor &battleVisitor)
         std::vector<std::shared_ptr<NPC>> targets;
         battlefield->findTargets(npc, battleVisitor, targets);
 
-        auto it = targets.begin();
-        while (it != targets.end())
-        {
-            if (!(*it) || (*it)->getHP() <= 0)
-            {
-                it = targets.erase(it);
-            }
-            else
-            {
-                ++it;
-            }
-        }
-
         if (!targets.empty())
         {
             for (auto &target : targets)
             {
-                if (!target)
+                if (!target || target->getHP() <= 0)
                     continue;
                 target->accept(battleVisitor, *npc);
 
@@ -145,22 +132,5 @@ bool GameController::isBattleEnd(BattleVisitor &battleVisitor)
         }
     }
 
-    if (aliveCount <= 1 || !canAttack)
-    {
-        if (aliveCount == 1)
-        {
-            auto npc = battlefield->getNPC(0, 0);
-            if (npc)
-            {
-
-                if (logger)
-                {
-                    logger->notifyDead(*npc);
-                }
-            }
-        }
-        return true;
-    }
-
-    return false;
+    return !canAttack;
 }
