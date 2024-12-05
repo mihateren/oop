@@ -53,6 +53,7 @@ void GameController::updateGame(BattleVisitor &battleVisitor)
     std::atomic<bool> isRunning(true);
 
     std::thread displayThread(&GameController::displayMapPeriodically, this, std::ref(isRunning));
+    std::thread movementThread(&GameController::moveNPCsPeriodically, this, std::ref(isRunning));
 
     bool battleContinues = true;
     int turnCount = 1;
@@ -67,43 +68,105 @@ void GameController::updateGame(BattleVisitor &battleVisitor)
         attackNPCs(battleVisitor);
         checkDeadNPCs();
 
-        // moveNPCs(battlefield);
-
         std::this_thread::sleep_for(std::chrono::seconds(1));
         battleContinues = !isBattleEnd(battleVisitor);
         turnCount++;
     }
 
     isRunning = false;
-    displayThread.join();
 
+    movementThread.join();
+    displayThread.join();
     endGame();
+    std::cerr << "updateGame: endGame() completed\n";
+}
+
+void GameController::moveNPCsPeriodically(std::atomic<bool> &isRunning)
+{
+    try
+    {
+        while (isRunning)
+        {
+            {
+                std::lock_guard<std::shared_mutex> lock(battlefieldMutex);
+                moveNPCs(this->battlefield);
+            }
+
+            {
+                std::shared_lock<std::shared_mutex> lock(battlefieldMutex);
+                detectBattles();
+            }
+
+            std::this_thread::sleep_for(std::chrono::seconds(1));
+        }
+    }
+    catch (const std::exception &e)
+    {
+        std::cerr << "Exception in moveNPCsPeriodically: " << e.what() << std::endl;
+        isRunning = false;
+    }
 }
 
 void GameController::displayMapPeriodically(std::atomic<bool> &isRunning)
 {
-    while (isRunning)
+    try
     {
+        while (isRunning)
         {
-            std::shared_lock<std::shared_mutex> lock(battlefieldMutex);
-            battlefield->print();
-        }
+            {
+                std::shared_lock<std::shared_mutex> lock(battlefieldMutex);
+                battlefield->print();
+            }
 
-        std::this_thread::sleep_for(std::chrono::seconds(1));
+            std::this_thread::sleep_for(std::chrono::seconds(1));
+        }
+    }
+    catch (const std::exception &e)
+    {
+        std::cerr << "Exception in displayMapPeriodically: " << e.what() << std::endl;
+        isRunning = false;
     }
 }
 
 void GameController::moveNPCs(Battlefield *battlefield)
 {
-    std::lock_guard<std::shared_mutex> lock(battlefieldMutex);
-    for (int x = 0; x < battlefield->getFieldSize(); ++x)
+    std::vector<std::shared_ptr<NPC>> npcsToMove = battlefield->getAllNPCs();
+
+    for (auto &npc : npcsToMove)
     {
-        for (int y = 0; y < battlefield->getFieldSize(); ++y)
+        npc->move(battlefield);
+    }
+}
+
+void GameController::detectBattles()
+{
+    std::vector<std::shared_ptr<NPC>> npcs = battlefield->getAllNPCs();
+
+    for (auto &npc : npcs)
+    {
+        if (!npc)
+            continue;
+
+        std::shared_lock<std::shared_mutex> npcLock(npc->getMutex());
+        if (npc->getHP() <= 0)
+            continue;
+
+        std::vector<std::shared_ptr<NPC>> targets;
+        battlefield->findTargets(npc, targets);
+
+        for (auto &target : targets)
         {
-            auto npc = battlefield->getNPC(x, y);
-            if (npc && npc->getHP() > 0)
+            if (!target)
+                continue;
+
+            std::shared_lock<std::shared_mutex> targetLock(target->getMutex());
+            if (target->getHP() <= 0)
+                continue;
+
+            if (npc != target)
             {
-                npc->move(battlefield);
+                std::lock_guard<std::mutex> lock(battleTasksMutex);
+                battleTasks.emplace_back(npc, target);
             }
         }
     }
@@ -112,37 +175,55 @@ void GameController::moveNPCs(Battlefield *battlefield)
 void GameController::attackNPCs(BattleVisitor &battleVisitor)
 {
     std::vector<std::shared_ptr<NPC>> aliveNPCs;
-    for (int x = 0; x < battlefield->getFieldSize(); ++x)
     {
-        for (int y = 0; y < battlefield->getFieldSize(); ++y)
-        {
-            auto npc = battlefield->getNPC(x, y);
-            if (npc && npc->getHP() > 0)
-            {
-                aliveNPCs.push_back(npc);
-            }
-        }
+        std::shared_lock<std::shared_mutex> lock(battlefieldMutex);
+        aliveNPCs = battlefield->getAllNPCs();
     }
 
     for (auto &npc : aliveNPCs)
     {
         if (!npc)
-            continue;
-        std::vector<std::shared_ptr<NPC>> targets;
-        battlefield->findTargets(npc, battleVisitor, targets);
-
-        if (!targets.empty())
         {
-            for (auto &target : targets)
-            {
-                if (!target || target->getHP() <= 0)
-                    continue;
-                target->accept(battleVisitor, *npc);
+            continue;
+        }
 
-                if (logger)
-                {
-                    logger->notifyDamageReceived(*target, npc->getAttackPower(), *npc);
-                }
+        std::shared_lock<std::shared_mutex> npcLock(npc->getMutex());
+        if (npc->getHP() <= 0)
+        {
+            continue;
+        }
+
+        std::vector<std::shared_ptr<NPC>> targets;
+        {
+            std::shared_lock<std::shared_mutex> lock(battlefieldMutex);
+            battlefield->findTargets(npc, targets);
+        }
+
+        for (auto &target : targets)
+        {
+            if (!target)
+            {
+                continue;
+            }
+
+            std::shared_lock<std::shared_mutex> targetLock(target->getMutex());
+            if (target->getHP() <= 0)
+            {
+                continue;
+            }
+
+            try
+            {
+                target->accept(battleVisitor, *npc);
+            }
+            catch (const std::exception &e)
+            {
+                std::cerr << "Exception during attackNPCs: " << e.what() << std::endl;
+            }
+
+            if (logger)
+            {
+                logger->notifyDamageReceived(*target, npc->getAttackPower(), *npc);
             }
         }
     }
@@ -150,6 +231,8 @@ void GameController::attackNPCs(BattleVisitor &battleVisitor)
 
 void GameController::checkDeadNPCs()
 {
+    std::vector<std::pair<int, int>> positionsToRemove;
+
     for (int x = 0; x < battlefield->getFieldSize(); ++x)
     {
         for (int y = 0; y < battlefield->getFieldSize(); ++y)
@@ -161,17 +244,20 @@ void GameController::checkDeadNPCs()
                 {
                     logger->notifyDead(*npc);
                 }
-                battlefield->removeNPC(x, y);
-                npc.reset();
+                positionsToRemove.emplace_back(x, y);
             }
         }
+    }
+
+    for (const auto &pos : positionsToRemove)
+    {
+        battlefield->removeNPC(pos.first, pos.second);
     }
 }
 
 bool GameController::isBattleEnd(BattleVisitor &battleVisitor)
 {
     int aliveCount = 0;
-    bool canAttack = false;
 
     for (int x = 0; x < battlefield->getFieldSize(); ++x)
     {
@@ -181,22 +267,20 @@ bool GameController::isBattleEnd(BattleVisitor &battleVisitor)
             if (npc && npc->getHP() > 0)
             {
                 ++aliveCount;
-
-                std::vector<std::shared_ptr<NPC>> targets;
-                battlefield->findTargets(npc, battleVisitor, targets);
-                if (!targets.empty())
+                if (aliveCount > 1)
                 {
-                    canAttack = true;
+                    return false;
                 }
             }
         }
     }
 
-    return !canAttack;
+    return (aliveCount <= 1);
 }
 
 void GameController::endGame()
 {
+    battlefield->print();
     if (logger)
     {
         logger->notifyGameEnd();

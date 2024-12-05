@@ -30,6 +30,7 @@ std::shared_ptr<NPC> (&Battlefield::getField())[fieldSize][fieldSize]
 
 void Battlefield::placeNPC(std::shared_ptr<NPC> npc, int x, int y)
 {
+    std::lock_guard<std::shared_mutex> lock(fieldMutex);
     if (!npc)
         return;
     if (x >= 0 && x < this->getFieldSize() && y >= 0 && y < this->getFieldSize())
@@ -45,6 +46,7 @@ void Battlefield::placeNPC(std::shared_ptr<NPC> npc, int x, int y)
 
 std::shared_ptr<NPC> Battlefield::getNPC(int x, int y) const
 {
+    std::shared_lock<std::shared_mutex> lock(fieldMutex);
     if (x >= 0 && x < this->getFieldSize() && y >= 0 && y < this->getFieldSize())
     {
         return field[x][y];
@@ -54,16 +56,19 @@ std::shared_ptr<NPC> Battlefield::getNPC(int x, int y) const
 
 void Battlefield::removeNPC(int x, int y)
 {
+    std::lock_guard<std::shared_mutex> lock(fieldMutex);
     if (x >= 0 && x < this->getFieldSize() && y >= 0 && y < this->getFieldSize())
     {
         field[x][y] = nullptr;
     }
 }
 
-void Battlefield::findTargets(std::shared_ptr<NPC> npc, BattleVisitor &battleVisitor, std::vector<std::shared_ptr<NPC>> &targets)
+void Battlefield::findTargets(std::shared_ptr<NPC> npc, std::vector<std::shared_ptr<NPC>> &targets)
 {
+    std::shared_lock<std::shared_mutex> lock(fieldMutex);
     if (!npc)
         return;
+
     int attackDistance = npc->getAttackDistance();
     int startX = std::max(0, npc->getPosition().x - attackDistance);
     int endX = std::min(this->getFieldSize() - 1, npc->getPosition().x + attackDistance);
@@ -74,7 +79,7 @@ void Battlefield::findTargets(std::shared_ptr<NPC> npc, BattleVisitor &battleVis
     {
         for (int ny = startY; ny <= endY; ++ny)
         {
-            auto target = getNPC(nx, ny);
+            auto &target = field[nx][ny];
             if (target && target != npc)
             {
                 int dx = nx - npc->getPosition().x;
@@ -91,6 +96,7 @@ void Battlefield::findTargets(std::shared_ptr<NPC> npc, BattleVisitor &battleVis
 
 void Battlefield::print() const
 {
+    std::shared_lock<std::shared_mutex> lock(fieldMutex);
     for (int i = 0; i < this->getFieldSize(); ++i)
     {
         for (int j = 0; j < this->getFieldSize(); ++j)
@@ -100,4 +106,23 @@ void Battlefield::print() const
         std::cout << std::endl;
     }
     std::cout << std::endl;
+}
+
+std::vector<std::shared_ptr<NPC>> Battlefield::getAllNPCs() const
+{
+    std::shared_lock<std::shared_mutex> lock(fieldMutex);
+    std::vector<std::shared_ptr<NPC>> npcs;
+
+    for (int x = 0; x < fieldSize; ++x)
+    {
+        for (int y = 0; y < fieldSize; ++y)
+        {
+            if (field[x][y])
+            {
+                npcs.push_back(field[x][y]);
+            }
+        }
+    }
+
+    return npcs;
 }

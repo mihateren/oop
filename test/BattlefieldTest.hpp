@@ -52,7 +52,7 @@ TEST(BattlefieldTest, FindTargetsSingleNPC)
     battlefield.placeNPC(npc, 10, 20);
     std::vector<std::shared_ptr<NPC>> targets;
     BattleVisitor battleVisitor;
-    battlefield.findTargets(npc, battleVisitor, targets);
+    battlefield.findTargets(npc, targets);
 
     ASSERT_TRUE(targets.size() == 0);
 }
@@ -70,7 +70,7 @@ TEST(BattlefieldTest, FindTargetsMultipleNPCs)
     battlefield.placeNPC(npc3, 10, 22);
     std::vector<std::shared_ptr<NPC>> targets;
     BattleVisitor battleVisitor;
-    battlefield.findTargets(npc1, battleVisitor, targets);
+    battlefield.findTargets(npc1, targets);
 
     ASSERT_TRUE(targets.size() == 2);
 }

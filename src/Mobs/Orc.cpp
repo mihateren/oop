@@ -13,32 +13,52 @@ void Orc::move(Battlefield *battlefield)
     int y = this->getPosition().y;
 
     int fieldSize = battlefield->getFieldSize();
+    int maxMoveDistance = this->getMoveDistance();
 
-    std::vector<std::pair<int, int>> directions = {
-        {-1, -1}, {-1, 0}, {-1, 1}, {0, -1}, {0, 1}, {1, -1}, {1, 0}, {1, 1}};
+    std::vector<Point> validPositions;
 
-    std::vector<std::pair<int, int>> validDirections;
-
-    for (const auto &[dx, dy] : directions)
+    for (int dx = -maxMoveDistance; dx <= maxMoveDistance; ++dx)
     {
-        int newX = x + dx;
-        int newY = y + dy;
-
-        if (newX >= 0 && newX < fieldSize &&
-            newY >= 0 && newY < fieldSize &&
-            battlefield->getNPC(newX, newY) == nullptr)
+        for (int dy = -maxMoveDistance; dy <= maxMoveDistance; ++dy)
         {
-            validDirections.emplace_back(newX, newY);
+            if (dx == 0 && dy == 0)
+                continue;
+
+            int newX = x + dx;
+            int newY = y + dy;
+
+            if (newX >= 0 && newX < fieldSize &&
+                newY >= 0 && newY < fieldSize)
+            {
+                std::shared_ptr<NPC> npcAtNewPos = battlefield->getNPC(newX, newY);
+                if (!npcAtNewPos)
+                {
+                    validPositions.emplace_back(newX, newY);
+                }
+            }
         }
     }
 
-    if (!validDirections.empty())
+    if (!validPositions.empty())
     {
-        std::pair<int, int> chosenDirection = validDirections[rand() % validDirections.size()];
-        int newX = chosenDirection.first;
-        int newY = chosenDirection.second;
+        Point chosenPosition = validPositions[rand() % validPositions.size()];
+        int newX = chosenPosition.x;
+        int newY = chosenPosition.y;
 
-        battlefield->removeNPC(x, y);
-        battlefield->placeNPC(std::shared_ptr<Orc>(this), newX, newY);
+        try
+        {
+            std::shared_ptr<NPC> self_shared_ptr = shared_from_this();
+
+            {
+                battlefield->removeNPC(x, y);
+                battlefield->placeNPC(self_shared_ptr, newX, newY);
+            }
+
+            this->setPosition(newX, newY);
+        }
+        catch (const std::exception &e)
+        {
+            std::cerr << "Exception in Orc::move(): " << e.what() << std::endl;
+        }
     }
 }

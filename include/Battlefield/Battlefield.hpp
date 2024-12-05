@@ -3,12 +3,14 @@
 #include <memory>
 #include <vector>
 #include "Mobs/NPC.hpp"
+#include <shared_mutex>
 
 class Battlefield
 {
 private:
     static constexpr int fieldSize = 50;
     std::shared_ptr<NPC> field[fieldSize][fieldSize];
+    mutable std::shared_mutex fieldMutex;
 
 public:
     Battlefield();
@@ -22,5 +24,8 @@ public:
     int getFieldSize() const { return fieldSize; }
     void print() const;
 
-    void findTargets(std::shared_ptr<NPC> npc, BattleVisitor &battleVisitor, std::vector<std::shared_ptr<NPC>> &targets);
+    std::shared_mutex &getMutex() { return fieldMutex; }
+
+    void findTargets(std::shared_ptr<NPC> npc, std::vector<std::shared_ptr<NPC>> &targets);
+    std::vector<std::shared_ptr<NPC>> getAllNPCs() const;
 };

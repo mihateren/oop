@@ -13,6 +13,7 @@
 #include <shared_mutex>
 #include <set>
 #include <utility>
+#include <deque>
 
 class GameController
 {
@@ -20,6 +21,8 @@ private:
     Battlefield *battlefield;
     LogManager *logger;
     std::shared_mutex battlefieldMutex;
+    std::deque<std::pair<std::shared_ptr<NPC>, std::shared_ptr<NPC>>> battleTasks;
+    std::mutex battleTasksMutex;
 
 public:
     GameController(Battlefield &battlefield);
@@ -29,9 +32,14 @@ public:
 
 private:
     void updateGame(BattleVisitor &battleVisitor);
+
     void displayMapPeriodically(std::atomic<bool> &isRunning);
+    void moveNPCsPeriodically(std::atomic<bool> &isRunning);
+    void detectBattles();
+
     void attackNPCs(BattleVisitor &battleVisitor);
     void moveNPCs(Battlefield *battlefield);
+
     void checkDeadNPCs();
     bool isBattleEnd(BattleVisitor &battleVisitor);
     void endGame();

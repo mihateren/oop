@@ -27,7 +27,6 @@ int main()
     GameController gameController(logManager, battlefield);
 
     gameController.fillRandomNPCs(battlefield);
-    battlefield.print();
     gameController.startGame(battleVisitor);
 
     // try
