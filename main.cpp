@@ -14,10 +14,10 @@
 
 int main()
 {
+    setlocale(LC_ALL, "ru_RU.UTF-8");
+
     LogManager logManager;
     std::shared_ptr<Listener> consoleListener = std::make_shared<ConsoleListener>();
-    std::shared_ptr<Listener> fileListener = std::make_shared<FileListener>();
-    logManager.addListener(fileListener);
     logManager.addListener(consoleListener);
 
     NPCFactory fabric;
@@ -26,23 +26,28 @@ int main()
 
     GameController gameController(logManager, battlefield);
 
-    try
-    {
-        std::vector<std::shared_ptr<NPC>> npcs = fabric.createNPCFromFile("npcs.txt");
+    gameController.fillRandomNPCs(battlefield);
+    battlefield.print();
 
-        for (const auto &npc : npcs)
-        {
-            battlefield.placeNPC(npc);
-        }
+    // gameController.startGame(battleVisitor);
 
-        gameController.startGame(battleVisitor);
+    // try
+    // {
+    //     std::vector<std::shared_ptr<NPC>> npcs = fabric.createNPCFromFile("npcs.txt");
 
-        gameController.endGame();
-    }
-    catch (const std::exception &e)
-    {
-        std::cerr << "Ошибка: " << e.what() << std::endl;
-    }
+    //     for (const auto &npc : npcs)
+    //     {
+    //         battlefield.placeNPC(npc);
+    //     }
+
+    //     gameController.startGame(battleVisitor);
+
+    //     gameController.endGame();
+    // }
+    // catch (const std::exception &e)
+    // {
+    //     std::cerr << "Ошибка: " << e.what() << std::endl;
+    // }
 
     return 0;
 }

@@ -7,18 +7,20 @@
 class Battlefield
 {
 private:
-    std::shared_ptr<NPC> field[100][100];
+    static constexpr int fieldSize = 50;
+    std::shared_ptr<NPC> field[fieldSize][fieldSize];
 
 public:
     Battlefield();
     ~Battlefield();
 
-    std::shared_ptr<NPC> (&getField())[100][100];
+    std::shared_ptr<NPC> (&getField())[fieldSize][fieldSize];
 
     void placeNPC(std::shared_ptr<NPC> npc);
     void removeNPC(int x, int y);
     std::shared_ptr<NPC> getNPC(int x, int y) const;
-    int getFieldSize() const { return 100; }
+    int getFieldSize() const { return fieldSize; }
+    void print() const;
 
     void findTargets(std::shared_ptr<NPC> npc, BattleVisitor &battleVisitor, std::vector<std::shared_ptr<NPC>> &targets);
 };

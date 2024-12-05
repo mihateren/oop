@@ -24,5 +24,6 @@ public:
     int getAttackPower() const override { return attackPower; }
     int getAttackDistance() const override { return attackDistance; }
     const Point &getPosition() const override { return position; }
-    const char *getType() const override { return "Друид"; }
+    void setPosition(int x, int y) override { position = Point(x, y); }
+    const char *getType() const override { return "Druid"; }
 };

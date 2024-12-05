@@ -11,6 +11,24 @@ GameController::GameController(LogManager &logManager, Battlefield &battlefield)
 {
 }
 
+void GameController::fillRandomNPCs(Battlefield &battlefield)
+{
+    NPCFactory npcFactory;
+    NPCType npcTypes[] = {NPCType::Orc, NPCType::Squirrel, NPCType::Druid};
+    for (int count = 0; count < 50; count++)
+    {
+        int x, y;
+        do
+        {
+            x = rand() % battlefield.getFieldSize();
+            y = rand() % battlefield.getFieldSize();
+        } while (battlefield.getNPC(x, y) != nullptr);
+        NPCType randType = npcTypes[rand() % 3];
+        std::shared_ptr<NPC> npc = npcFactory.createNPC(randType, x, y);
+        battlefield.placeNPC(npc);
+    }
+}
+
 void GameController::startGame(BattleVisitor &battleVisitor)
 {
     if (logger)

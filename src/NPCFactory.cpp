@@ -73,5 +73,5 @@ NPCType NPCFactory::stringToNPCType(const std::string &typeStr) const
     else if (typeStr == "Druid")
         return NPCType::Druid;
     else
-        throw std::invalid_argument("Неизвестный тип NPC: " + typeStr);
+        throw std::invalid_argument("Invalid NPC type: " + typeStr);
 }

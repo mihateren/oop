@@ -52,16 +52,16 @@ TEST(GameCycleTest, EveryoneAlive)
     GameController gameController(battlefield);
     BattleVisitor battleVisitor;
 
-    std::shared_ptr<NPC> orc = npcFactory.createNPC(NPCType::Orc, 99, 0);
-    std::shared_ptr<NPC> squirrel = npcFactory.createNPC(NPCType::Squirrel, 5, 99);
-    std::shared_ptr<NPC> druid = npcFactory.createNPC(NPCType::Druid, 5, 3);
+    std::shared_ptr<NPC> orc = npcFactory.createNPC(NPCType::Orc, 0, 0);
+    std::shared_ptr<NPC> squirrel = npcFactory.createNPC(NPCType::Squirrel, 5, 49);
+    std::shared_ptr<NPC> druid = npcFactory.createNPC(NPCType::Druid, 49, 3);
     battlefield.placeNPC(orc);
     battlefield.placeNPC(squirrel);
     battlefield.placeNPC(druid);
 
     gameController.startGame(battleVisitor);
 
-    ASSERT_TRUE(std::strcmp(battlefield.getNPC(99, 0)->getType(), "Орк") == 0);
-    ASSERT_TRUE(std::strcmp(battlefield.getNPC(5, 99)->getType(), "Белка") == 0);
-    ASSERT_TRUE(std::strcmp(battlefield.getNPC(5, 3)->getType(), "Друид") == 0);
+    ASSERT_TRUE(std::strcmp(battlefield.getNPC(0, 0)->getType(), "Orc") == 0);
+    ASSERT_TRUE(std::strcmp(battlefield.getNPC(5, 49)->getType(), "Squirrel") == 0);
+    ASSERT_TRUE(std::strcmp(battlefield.getNPC(49, 3)->getType(), "Druid") == 0);
 }

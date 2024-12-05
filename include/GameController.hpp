@@ -5,6 +5,7 @@
 #include "Battlefield/Battlefield.hpp"
 #include "Logger/LogManager.hpp"
 #include "Mobs/Visitors/BattleVisitor.hpp"
+#include "NPCFactory.hpp"
 
 class GameController
 {
@@ -15,6 +16,7 @@ private:
 public:
     GameController(Battlefield &battlefield);
     GameController(LogManager &logManager, Battlefield &battlefield);
+    void fillRandomNPCs(Battlefield &battlefield);
     void startGame(BattleVisitor &battleVisitor);
     void updateGame(BattleVisitor &battleVisitor);
     void endGame();

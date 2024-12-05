@@ -23,7 +23,7 @@ Battlefield::~Battlefield()
     }
 }
 
-std::shared_ptr<NPC> (&Battlefield::getField())[100][100]
+std::shared_ptr<NPC> (&Battlefield::getField())[fieldSize][fieldSize]
 {
     return field;
 }
@@ -84,4 +84,17 @@ void Battlefield::findTargets(std::shared_ptr<NPC> npc, BattleVisitor &battleVis
             }
         }
     }
+}
+
+void Battlefield::print() const
+{
+    for (int i = 0; i < this->getFieldSize(); ++i)
+    {
+        for (int j = 0; j < this->getFieldSize(); ++j)
+        {
+            std::cout << (field[i][j] ? field[i][j]->getType()[0] : '.') << " ";
+        }
+        std::cout << std::endl;
+    }
+    std::cout << std::endl;
 }

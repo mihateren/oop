@@ -13,28 +13,28 @@ TEST(FactoryTest, FactoryTest)
     std::shared_ptr<NPC> squirrel = factory.createNPC(NPCType::Squirrel);
     std::shared_ptr<NPC> druid = factory.createNPC(NPCType::Druid);
 
-    ASSERT_TRUE(std::strcmp(orc->getType(), "Орк") == 0);
-    ASSERT_TRUE(std::strcmp(squirrel->getType(), "Белка") == 0);
-    ASSERT_TRUE(std::strcmp(druid->getType(), "Друид") == 0);
+    ASSERT_TRUE(std::strcmp(orc->getType(), "Orc") == 0);
+    ASSERT_TRUE(std::strcmp(squirrel->getType(), "Squirrel") == 0);
+    ASSERT_TRUE(std::strcmp(druid->getType(), "Druid") == 0);
 }
 
 TEST(FactoryTest, FactoryWithCoordsTest)
 {
     NPCFactory factory;
-    std::shared_ptr<NPC> orc = factory.createNPC(NPCType::Orc, 100, 101);
-    std::shared_ptr<NPC> squirrel = factory.createNPC(NPCType::Squirrel, 100, 102);
-    std::shared_ptr<NPC> druid = factory.createNPC(NPCType::Druid, 100, 103);
+    std::shared_ptr<NPC> orc = factory.createNPC(NPCType::Orc, 0, 4);
+    std::shared_ptr<NPC> squirrel = factory.createNPC(NPCType::Squirrel, 0, 5);
+    std::shared_ptr<NPC> druid = factory.createNPC(NPCType::Druid, 0, 6);
 
-    ASSERT_TRUE(std::strcmp(orc->getType(), "Орк") == 0);
-    ASSERT_TRUE(std::strcmp(squirrel->getType(), "Белка") == 0);
-    ASSERT_TRUE(std::strcmp(druid->getType(), "Друид") == 0);
+    ASSERT_TRUE(std::strcmp(orc->getType(), "Orc") == 0);
+    ASSERT_TRUE(std::strcmp(squirrel->getType(), "Squirrel") == 0);
+    ASSERT_TRUE(std::strcmp(druid->getType(), "Druid") == 0);
 
-    ASSERT_TRUE(orc->getPosition().x == 100);
-    ASSERT_TRUE(orc->getPosition().y == 101);
-    ASSERT_TRUE(squirrel->getPosition().x == 100);
-    ASSERT_TRUE(squirrel->getPosition().y == 102);
-    ASSERT_TRUE(druid->getPosition().x == 100);
-    ASSERT_TRUE(druid->getPosition().y == 103);
+    ASSERT_TRUE(orc->getPosition().x == 0);
+    ASSERT_TRUE(orc->getPosition().y == 4);
+    ASSERT_TRUE(squirrel->getPosition().x == 0);
+    ASSERT_TRUE(squirrel->getPosition().y == 5);
+    ASSERT_TRUE(druid->getPosition().x == 0);
+    ASSERT_TRUE(druid->getPosition().y == 6);
 }
 
 TEST(FactoryTest, FactoryFromFileTest)
@@ -55,9 +55,9 @@ TEST(FactoryTest, FactoryFromFileTest)
     NPCFactory factory;
     std::vector<std::shared_ptr<NPC>> npcs = factory.createNPCFromFile("testNPCs.txt");
 
-    ASSERT_TRUE(std::strcmp(npcs[0]->getType(), "Орк") == 0);
-    ASSERT_TRUE(std::strcmp(npcs[1]->getType(), "Белка") == 0);
-    ASSERT_TRUE(std::strcmp(npcs[2]->getType(), "Друид") == 0);
+    ASSERT_TRUE(std::strcmp(npcs[0]->getType(), "Orc") == 0);
+    ASSERT_TRUE(std::strcmp(npcs[1]->getType(), "Squirrel") == 0);
+    ASSERT_TRUE(std::strcmp(npcs[2]->getType(), "Druid") == 0);
 
     std::remove("testNPCs.txt");
 }
