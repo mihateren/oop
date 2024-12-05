@@ -18,14 +18,13 @@ int main()
     std::shared_ptr<Listener> consoleListener = std::make_shared<ConsoleListener>();
     std::shared_ptr<Listener> fileListener = std::make_shared<FileListener>();
     logManager.addListener(fileListener);
+    logManager.addListener(consoleListener);
 
     NPCFactory fabric;
     BattleVisitor battleVisitor;
     Battlefield battlefield;
 
     GameController gameController(logManager, battlefield);
-
-    std::srand(static_cast<unsigned int>(std::time(nullptr)));
 
     try
     {
