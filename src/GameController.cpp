@@ -52,9 +52,9 @@ void GameController::endGame()
 void GameController::attackNPCs(BattleVisitor &battleVisitor)
 {
     std::vector<std::shared_ptr<NPC>> aliveNPCs;
-    for (int x = 0; x < 500; ++x)
+    for (int x = 0; x < battlefield->getFieldSize(); ++x)
     {
-        for (int y = 0; y < 500; ++y)
+        for (int y = 0; y < battlefield->getFieldSize(); ++y)
         {
             auto npc = battlefield->getNPC(x, y);
             if (npc && npc->getHP() > 0)
@@ -90,9 +90,9 @@ void GameController::attackNPCs(BattleVisitor &battleVisitor)
 
 void GameController::checkDeadNPCs()
 {
-    for (int x = 0; x < 500; ++x)
+    for (int x = 0; x < battlefield->getFieldSize(); ++x)
     {
-        for (int y = 0; y < 500; ++y)
+        for (int y = 0; y < battlefield->getFieldSize(); ++y)
         {
             auto npc = battlefield->getNPC(x, y);
             if (npc && npc->getHP() <= 0)
@@ -113,9 +113,9 @@ bool GameController::isBattleEnd(BattleVisitor &battleVisitor)
     int aliveCount = 0;
     bool canAttack = false;
 
-    for (int x = 0; x < 500; ++x)
+    for (int x = 0; x < battlefield->getFieldSize(); ++x)
     {
-        for (int y = 0; y < 500; ++y)
+        for (int y = 0; y < battlefield->getFieldSize(); ++y)
         {
             auto npc = battlefield->getNPC(x, y);
             if (npc && npc->getHP() > 0)

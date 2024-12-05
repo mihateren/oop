@@ -47,9 +47,9 @@ TEST(FactoryTest, FactoryFromFileTest)
     std::ofstream testFile("testNPCs.txt", std::ios::out);
     ASSERT_TRUE(testFile.is_open());
 
-    testFile << "Orc 100 110\n";
-    testFile << "Squirrel 100 101\n";
-    testFile << "Druid 100 108\n";
+    testFile << "Orc 0 1\n";
+    testFile << "Squirrel 0 2\n";
+    testFile << "Druid 0 3\n";
     testFile.close();
 
     NPCFactory factory;

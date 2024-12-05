@@ -20,11 +20,11 @@ std::shared_ptr<NPC> NPCFactory::createNPC(NPCType type, int x, int y) const
     switch (type)
     {
     case NPCType::Orc:
-        return std::make_shared<Orc>(100, 5, 40, x, y);
+        return std::make_shared<Orc>(100, 20, 10, 40, x, y);
     case NPCType::Squirrel:
-        return std::make_shared<Squirrel>(10, 1, 0, x, y);
+        return std::make_shared<Squirrel>(100, 15, 5, 20, x, y);
     case NPCType::Druid:
-        return std::make_shared<Druid>(80, 10, 30, x, y);
+        return std::make_shared<Druid>(100, 10, 15, 30, x, y);
     default:
         return nullptr;
     }
@@ -52,9 +52,9 @@ std::vector<std::shared_ptr<NPC>> NPCFactory::createNPCFromFile(const std::strin
 
             NPCType type = stringToNPCType(typeStr);
 
-            if (x < 0 || x > 500 || y < 0 || y > 500)
+            if (x < 0 || x > 100 || y < 0 || y > 100)
             {
-                throw std::out_of_range("Координаты должны быть в пределах от 0 до 500");
+                throw std::out_of_range("Координаты должны быть в пределах от 0 до 100");
             }
 
             npcs.push_back(createNPC(type, x, y));

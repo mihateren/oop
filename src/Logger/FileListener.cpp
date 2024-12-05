@@ -27,7 +27,7 @@ void FileListener::onGameStart(Battlefield &battlefield)
 {
     auto &field = battlefield.getField();
 
-    for (int i = 0; i < 500; ++i)
+    for (int i = 0; i < battlefield.getFieldSize(); ++i)
     {
         for (int j = 0; j < 500; ++j)
         {

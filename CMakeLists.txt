@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
-project(lr6)
+project(lr7)
 
 # Установка стандарта C++
 set(CMAKE_CXX_STANDARD 20)
@@ -29,8 +29,8 @@ file(GLOB_RECURSE SRC_SOURCES LIST_DIRECTORIES false ${SRC_DIR}/*.cpp ${SRC_DIR}
 file(GLOB_RECURSE TEST_SOURCES LIST_DIRECTORIES false ${TEST_DIR}/*.cpp)
 
 # Добавляем исполняемый файл
-add_executable(lr6 main.cpp ${SRC_SOURCES})
-target_include_directories(lr6 PRIVATE ${INCLUDE_DIR})
+add_executable(lr7 main.cpp ${SRC_SOURCES})
+target_include_directories(lr7 PRIVATE ${INCLUDE_DIR})
 
 # Добавляем исполняемый файл для тестов
 add_executable(tests ${TEST_SOURCES} ${SRC_SOURCES})

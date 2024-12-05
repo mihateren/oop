@@ -2,9 +2,9 @@
 
 Battlefield::Battlefield()
 {
-    for (int i = 0; i < 500; ++i)
+    for (int i = 0; i < this->getFieldSize(); ++i)
     {
-        for (int j = 0; j < 500; ++j)
+        for (int j = 0; j < this->getFieldSize(); ++j)
         {
             field[i][j] = nullptr;
         }
@@ -13,9 +13,9 @@ Battlefield::Battlefield()
 
 Battlefield::~Battlefield()
 {
-    for (int i = 0; i < 500; ++i)
+    for (int i = 0; i < this->getFieldSize(); ++i)
     {
-        for (int j = 0; j < 500; ++j)
+        for (int j = 0; j < this->getFieldSize(); ++j)
         {
             field[i][j].reset();
             field[i][j] = nullptr;
@@ -23,7 +23,7 @@ Battlefield::~Battlefield()
     }
 }
 
-std::shared_ptr<NPC> (&Battlefield::getField())[500][500]
+std::shared_ptr<NPC> (&Battlefield::getField())[100][100]
 {
     return field;
 }
@@ -34,7 +34,7 @@ void Battlefield::placeNPC(std::shared_ptr<NPC> npc)
         return;
     int x = npc->getPosition().x;
     int y = npc->getPosition().y;
-    if (x >= 0 && x < 500 && y >= 0 && y < 500)
+    if (x >= 0 && x < this->getFieldSize() && y >= 0 && y < this->getFieldSize())
     {
         field[x][y] = npc;
     }
@@ -42,7 +42,7 @@ void Battlefield::placeNPC(std::shared_ptr<NPC> npc)
 
 std::shared_ptr<NPC> Battlefield::getNPC(int x, int y) const
 {
-    if (x >= 0 && x < 500 && y >= 0 && y < 500)
+    if (x >= 0 && x < this->getFieldSize() && y >= 0 && y < this->getFieldSize())
     {
         return field[x][y];
     }
@@ -51,7 +51,7 @@ std::shared_ptr<NPC> Battlefield::getNPC(int x, int y) const
 
 void Battlefield::removeNPC(int x, int y)
 {
-    if (x >= 0 && x < 500 && y >= 0 && y < 500)
+    if (x >= 0 && x < this->getFieldSize() && y >= 0 && y < this->getFieldSize())
     {
         field[x][y] = nullptr;
     }
@@ -63,9 +63,9 @@ void Battlefield::findTargets(std::shared_ptr<NPC> npc, BattleVisitor &battleVis
         return;
     int attackDistance = npc->getAttackDistance();
     int startX = std::max(0, npc->getPosition().x - attackDistance);
-    int endX = std::min(499, npc->getPosition().x + attackDistance);
+    int endX = std::min(this->getFieldSize() - 1, npc->getPosition().x + attackDistance);
     int startY = std::max(0, npc->getPosition().y - attackDistance);
-    int endY = std::min(499, npc->getPosition().y + attackDistance);
+    int endY = std::min(this->getFieldSize() - 1, npc->getPosition().y + attackDistance);
 
     for (int nx = startX; nx <= endX; ++nx)
     {
