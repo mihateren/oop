@@ -15,14 +15,24 @@ void GameController::fillRandomNPCs(Battlefield &battlefield)
 {
     NPCFactory npcFactory;
     NPCType npcTypes[] = {NPCType::Orc, NPCType::Squirrel, NPCType::Druid};
+    std::set<std::pair<int, int>> occupiedPositions;
+
+    int fieldSize = battlefield.getFieldSize();
+    if (fieldSize * fieldSize < 50)
+    {
+        throw std::runtime_error("Field size is too small to place 50 NPCs.");
+    }
+
     for (int count = 0; count < 50; count++)
     {
         int x, y;
         do
         {
-            x = rand() % battlefield.getFieldSize();
-            y = rand() % battlefield.getFieldSize();
-        } while (battlefield.getNPC(x, y) != nullptr);
+            x = rand() % fieldSize;
+            y = rand() % fieldSize;
+        } while (occupiedPositions.find({x, y}) != occupiedPositions.end());
+
+        occupiedPositions.insert({x, y});
         NPCType randType = npcTypes[rand() % 3];
         std::shared_ptr<NPC> npc = npcFactory.createNPC(randType, x, y);
         battlefield.placeNPC(npc, x, y);
@@ -40,6 +50,10 @@ void GameController::startGame(BattleVisitor &battleVisitor)
 
 void GameController::updateGame(BattleVisitor &battleVisitor)
 {
+    std::atomic<bool> isRunning(true);
+
+    std::thread displayThread(&GameController::displayMapPeriodically, this, std::ref(isRunning));
+
     bool battleContinues = true;
     int turnCount = 1;
 
@@ -52,16 +66,36 @@ void GameController::updateGame(BattleVisitor &battleVisitor)
 
         attackNPCs(battleVisitor);
         checkDeadNPCs();
+
         // moveNPCs(battlefield);
 
+        std::this_thread::sleep_for(std::chrono::seconds(1));
         battleContinues = !isBattleEnd(battleVisitor);
-
         turnCount++;
+    }
+
+    isRunning = false;
+    displayThread.join();
+
+    endGame();
+}
+
+void GameController::displayMapPeriodically(std::atomic<bool> &isRunning)
+{
+    while (isRunning)
+    {
+        {
+            std::shared_lock<std::shared_mutex> lock(battlefieldMutex);
+            battlefield->print();
+        }
+
+        std::this_thread::sleep_for(std::chrono::seconds(1));
     }
 }
 
 void GameController::moveNPCs(Battlefield *battlefield)
 {
+    std::lock_guard<std::shared_mutex> lock(battlefieldMutex);
     for (int x = 0; x < battlefield->getFieldSize(); ++x)
     {
         for (int y = 0; y < battlefield->getFieldSize(); ++y)

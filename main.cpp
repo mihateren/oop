@@ -17,8 +17,8 @@ int main()
     setlocale(LC_ALL, "ru_RU.UTF-8");
 
     LogManager logManager;
-    std::shared_ptr<Listener> consoleListener = std::make_shared<ConsoleListener>();
-    logManager.addListener(consoleListener);
+    // std::shared_ptr<Listener> consoleListener = std::make_shared<ConsoleListener>();
+    // logManager.addListener(consoleListener);
 
     NPCFactory fabric;
     BattleVisitor battleVisitor;
@@ -28,8 +28,7 @@ int main()
 
     gameController.fillRandomNPCs(battlefield);
     battlefield.print();
-
-    // gameController.startGame(battleVisitor);
+    gameController.startGame(battleVisitor);
 
     // try
     // {

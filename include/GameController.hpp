@@ -6,12 +6,20 @@
 #include "Logger/LogManager.hpp"
 #include "Mobs/Visitors/BattleVisitor.hpp"
 #include "NPCFactory.hpp"
+#include <atomic>
+#include <thread>
+#include <chrono>
+#include <iostream>
+#include <shared_mutex>
+#include <set>
+#include <utility>
 
 class GameController
 {
 private:
     Battlefield *battlefield;
     LogManager *logger;
+    std::shared_mutex battlefieldMutex;
 
 public:
     GameController(Battlefield &battlefield);
@@ -21,6 +29,7 @@ public:
 
 private:
     void updateGame(BattleVisitor &battleVisitor);
+    void displayMapPeriodically(std::atomic<bool> &isRunning);
     void attackNPCs(BattleVisitor &battleVisitor);
     void moveNPCs(Battlefield *battlefield);
     void checkDeadNPCs();

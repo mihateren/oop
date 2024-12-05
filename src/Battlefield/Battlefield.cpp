@@ -38,7 +38,6 @@ void Battlefield::placeNPC(std::shared_ptr<NPC> npc, int x, int y)
     }
     else
     {
-        npc.reset();
         throw std::out_of_range("Invalid coordinates");
     }
     npc->setPosition(x, y);
