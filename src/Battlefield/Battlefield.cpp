@@ -28,16 +28,20 @@ std::shared_ptr<NPC> (&Battlefield::getField())[fieldSize][fieldSize]
     return field;
 }
 
-void Battlefield::placeNPC(std::shared_ptr<NPC> npc)
+void Battlefield::placeNPC(std::shared_ptr<NPC> npc, int x, int y)
 {
     if (!npc)
         return;
-    int x = npc->getPosition().x;
-    int y = npc->getPosition().y;
     if (x >= 0 && x < this->getFieldSize() && y >= 0 && y < this->getFieldSize())
     {
         field[x][y] = npc;
     }
+    else
+    {
+        npc.reset();
+        throw std::out_of_range("Invalid coordinates");
+    }
+    npc->setPosition(x, y);
 }
 
 std::shared_ptr<NPC> Battlefield::getNPC(int x, int y) const

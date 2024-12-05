@@ -3,7 +3,9 @@
 #include <iostream>
 #include <memory>
 #include "Battlefield/Point.hpp"
+#include <vector>
 class BattleVisitor;
+class Battlefield;
 
 class NPC
 {
@@ -18,6 +20,7 @@ public:
     virtual const char *getType() const = 0;
     virtual const Point &getPosition() const = 0;
     virtual void setPosition(int x, int y) = 0;
+    virtual void move(Battlefield *battlefield) = 0;
 
     virtual void accept(BattleVisitor &battleVisitor, const NPC &attacker) = 0;
 };

@@ -16,7 +16,7 @@ public:
 
     std::shared_ptr<NPC> (&getField())[fieldSize][fieldSize];
 
-    void placeNPC(std::shared_ptr<NPC> npc);
+    void placeNPC(std::shared_ptr<NPC> npc, int x, int y);
     void removeNPC(int x, int y);
     std::shared_ptr<NPC> getNPC(int x, int y) const;
     int getFieldSize() const { return fieldSize; }

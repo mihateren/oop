@@ -18,11 +18,12 @@ public:
     GameController(LogManager &logManager, Battlefield &battlefield);
     void fillRandomNPCs(Battlefield &battlefield);
     void startGame(BattleVisitor &battleVisitor);
-    void updateGame(BattleVisitor &battleVisitor);
-    void endGame();
 
 private:
+    void updateGame(BattleVisitor &battleVisitor);
     void attackNPCs(BattleVisitor &battleVisitor);
+    void moveNPCs(Battlefield *battlefield);
     void checkDeadNPCs();
     bool isBattleEnd(BattleVisitor &battleVisitor);
+    void endGame();
 };

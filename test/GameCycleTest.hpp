@@ -14,9 +14,9 @@ TEST(GameCycleTest, OrcAlive)
     std::shared_ptr<NPC> orc = npcFactory.createNPC(NPCType::Orc, 7, 0);
     std::shared_ptr<NPC> squirrel = npcFactory.createNPC(NPCType::Squirrel, 1, 0);
     std::shared_ptr<NPC> druid = npcFactory.createNPC(NPCType::Druid, 3, 9);
-    battlefield.placeNPC(orc);
-    battlefield.placeNPC(squirrel);
-    battlefield.placeNPC(druid);
+    battlefield.placeNPC(orc, 7, 0);
+    battlefield.placeNPC(squirrel, 1, 0);
+    battlefield.placeNPC(druid, 3, 9);
 
     gameController.startGame(battleVisitor);
 
@@ -34,9 +34,9 @@ TEST(GameCycleTest, EveryoneDead)
     std::shared_ptr<NPC> orc1 = npcFactory.createNPC(NPCType::Orc, 5, 0);
     std::shared_ptr<NPC> squirrel = npcFactory.createNPC(NPCType::Squirrel, 5, 1);
     std::shared_ptr<NPC> orc2 = npcFactory.createNPC(NPCType::Orc, 5, 2);
-    battlefield.placeNPC(orc1);
-    battlefield.placeNPC(squirrel);
-    battlefield.placeNPC(orc2);
+    battlefield.placeNPC(orc1, 5, 0);
+    battlefield.placeNPC(squirrel, 5, 1);
+    battlefield.placeNPC(orc2, 5, 2);
 
     gameController.startGame(battleVisitor);
 
@@ -55,9 +55,9 @@ TEST(GameCycleTest, EveryoneAlive)
     std::shared_ptr<NPC> orc = npcFactory.createNPC(NPCType::Orc, 0, 0);
     std::shared_ptr<NPC> squirrel = npcFactory.createNPC(NPCType::Squirrel, 5, 49);
     std::shared_ptr<NPC> druid = npcFactory.createNPC(NPCType::Druid, 49, 3);
-    battlefield.placeNPC(orc);
-    battlefield.placeNPC(squirrel);
-    battlefield.placeNPC(druid);
+    battlefield.placeNPC(orc, 0, 0);
+    battlefield.placeNPC(squirrel, 5, 49);
+    battlefield.placeNPC(druid, 49, 3);
 
     gameController.startGame(battleVisitor);
 

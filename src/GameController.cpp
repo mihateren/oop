@@ -25,7 +25,7 @@ void GameController::fillRandomNPCs(Battlefield &battlefield)
         } while (battlefield.getNPC(x, y) != nullptr);
         NPCType randType = npcTypes[rand() % 3];
         std::shared_ptr<NPC> npc = npcFactory.createNPC(randType, x, y);
-        battlefield.placeNPC(npc);
+        battlefield.placeNPC(npc, x, y);
     }
 }
 
@@ -52,6 +52,7 @@ void GameController::updateGame(BattleVisitor &battleVisitor)
 
         attackNPCs(battleVisitor);
         checkDeadNPCs();
+        // moveNPCs(battlefield);
 
         battleContinues = !isBattleEnd(battleVisitor);
 
@@ -59,11 +60,18 @@ void GameController::updateGame(BattleVisitor &battleVisitor)
     }
 }
 
-void GameController::endGame()
+void GameController::moveNPCs(Battlefield *battlefield)
 {
-    if (logger)
+    for (int x = 0; x < battlefield->getFieldSize(); ++x)
     {
-        logger->notifyGameEnd();
+        for (int y = 0; y < battlefield->getFieldSize(); ++y)
+        {
+            auto npc = battlefield->getNPC(x, y);
+            if (npc && npc->getHP() > 0)
+            {
+                npc->move(battlefield);
+            }
+        }
     }
 }
 
@@ -151,4 +159,12 @@ bool GameController::isBattleEnd(BattleVisitor &battleVisitor)
     }
 
     return !canAttack;
+}
+
+void GameController::endGame()
+{
+    if (logger)
+    {
+        logger->notifyGameEnd();
+    }
 }
